@@ -1,4 +1,4 @@
 3dPointVisualisation
 ====================
 
-A java application to visualise 3d points
+A javafx application to visualise 3d points
