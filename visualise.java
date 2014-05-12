@@ -11,7 +11,8 @@ import javafx.scene.input.MouseEvent;
 import java.util.List;
 import java.util.Scanner;
 
-public class visualise extends Application{
+public class visualise extends Application
+{
     final Group root = new Group();
     final Xform axisGroup = new Xform();
     final Xform pointGroup = new Xform();
@@ -39,7 +40,8 @@ public class visualise extends Application{
     private double mouseDeltaX;
     private double mouseDeltaY;
 
-    private void buildCamera(){
+    private void buildCamera()
+    {
         root.getChildren().add(cameraXform);
         cameraXform.getChildren().add(cameraXform2);
         cameraXform2.getChildren().add(cameraXform3);
@@ -55,7 +57,8 @@ public class visualise extends Application{
         camera.setFieldOfView(0.3);
     }
 
-    private void buildAxes(){
+    private void buildAxes()
+    {
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);
         redMaterial.setSpecularColor(Color.RED);
@@ -68,9 +71,9 @@ public class visualise extends Application{
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
 
-        final Box xAxis = new Box(AXIS_LENGTH, 0.1, 0.1);
-        final Box yAxis = new Box(0.1, AXIS_LENGTH, 0.1);
-        final Box zAxis = new Box(0.1, 0.1, AXIS_LENGTH);
+        final Box xAxis = new Box(AXIS_LENGTH, 0.01, 0.01);
+        final Box yAxis = new Box(0.01, AXIS_LENGTH, 0.01);
+        final Box zAxis = new Box(0.01, 0.01, AXIS_LENGTH);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
@@ -81,22 +84,27 @@ public class visualise extends Application{
         space.getChildren().addAll(axisGroup);
     }
 
-    private void handleMouse(Scene scene, final Node root){
-        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+    private void handleMouse(Scene scene, final Node root)
+    {
+        scene.setOnMousePressed(new EventHandler<MouseEvent>()
+        {
             @Override
-            public void handle(MouseEvent me){
+            public void handle(MouseEvent me)
+            {
                 mousePosX = me.getSceneX();
-                mousePosX = me.getSceneY();
+                mousePosY = me.getSceneY();
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
             }
         });
 
-        scene.setOnMouseDragged(new EventHandler<MouseEvent>(){
+        scene.setOnMouseDragged(new EventHandler<MouseEvent>()
+        {
             @Override
-            public void handle(MouseEvent me){
+            public void handle(MouseEvent me)
+            {
                 mouseOldX = mousePosX;
-                mouseOldY = mouseOldY;
+                mouseOldY = mousePosY;
                 mousePosX = me.getSceneX();
                 mousePosY = me.getSceneY();
                 mouseDeltaX = mousePosX - mouseOldX;
@@ -104,22 +112,25 @@ public class visualise extends Application{
 
                 double modifier = 1.0;
 
-                if (me.isPrimaryButtonDown()){
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX*MOUSE_SPEED*modifier*ROTATION_SPEED);
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY*MOUSE_SPEED*modifier*ROTATION_SPEED);
+                if (me.isPrimaryButtonDown())
+                {
+                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
     }
 
-    private void buildPoints(List<point> points){
+    private void buildPoints(List<point> points)
+    {
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);
         redMaterial.setSpecularColor(Color.RED);
 
         Xform pointsXform = new Xform();
-        
-        for (point p : points){
+
+        for (point p : points)
+        {
             Xform pointXform = new Xform();
             Sphere pointSphere = new Sphere(0.01);
             pointSphere.setMaterial(redMaterial);
@@ -139,34 +150,37 @@ public class visualise extends Application{
     }
 
     @Override
-        public void start(Stage primaryStage){
-            root.getChildren().add(space);
-            root.setDepthTest(DepthTest.ENABLE);
+    public void start(Stage primaryStage)
+    {
+        root.getChildren().add(space);
+        root.setDepthTest(DepthTest.ENABLE);
 
-            /* Scanner sr = new Scanner(System.in); */
-            /* String filename = sr.next(); */
-            String filename = "data.PCD";
+        /* Scanner sr = new Scanner(System.in); */
+        /* String filename = sr.next(); */
+        String filename = "data.PCD";
 
-            dataReader dr = new dataReader(filename);
+        dataReader dr = new dataReader(filename);
 
-            List<point> pointsList = dr.getPoints();
+        List<point> pointsList = dr.getPoints();
 
-            buildCamera();
-            buildAxes();
-            buildPoints(pointsList);
+        buildCamera();
+        buildAxes();
+        buildPoints(pointsList);
 
-            Scene scene = new Scene(root, 1024, 768, true);
-            scene.setFill(Color.GREY);
-            handleMouse(scene, space);
+        Scene scene = new Scene(root, 1024, 768, true);
+        scene.setFill(Color.GREY);
+        handleMouse(scene, space);
 
-            primaryStage.setTitle("3D Point Visualisation");
-            primaryStage.setScene(scene);
-            primaryStage.show();
+        primaryStage.setTitle("3D Point Visualisation");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-            scene.setCamera(camera);
-        }
+        scene.setCamera(camera);
+    }
 
-    public static void main(String[] args){
+    public static void main(String[] args)
+    {
         launch(args);
     }
 }
+
