@@ -1,6 +1,3 @@
-package cs2020;
-
-
 /*************************************************************************
  *  Compilation:  javac StdDraw.java
  *  Execution:    java StdDraw
