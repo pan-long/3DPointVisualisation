@@ -18,6 +18,8 @@ public class visualise extends Application{
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
+    final Xform cameraXform2 = new Xform();
+    final Xform cameraXform3 = new Xform();
 
     private static final double CAMERA_INITIAL_DISTANCE = -450;
     private static final double CAMERA_INITIAL_X_ANGLE = 70.0;
@@ -39,6 +41,10 @@ public class visualise extends Application{
 
     private void buildCamera(){
         root.getChildren().add(cameraXform);
+        cameraXform.getChildren().add(cameraXform2);
+        cameraXform2.getChildren().add(cameraXform3);
+        cameraXform3.getChildren().add(camera);
+        cameraXform3.setRotateZ(180.0);
 
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
@@ -46,7 +52,7 @@ public class visualise extends Application{
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
 
-        camera.setFieldOfView(1);
+        camera.setFieldOfView(0.3);
     }
 
     private void buildAxes(){
@@ -62,9 +68,9 @@ public class visualise extends Application{
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
 
-        final Box xAxis = new Box(AXIS_LENGTH, 1, 1);
-        final Box yAxis = new Box(1, AXIS_LENGTH, 1);
-        final Box zAxis = new Box(1, 1, AXIS_LENGTH);
+        final Box xAxis = new Box(AXIS_LENGTH, 0.1, 0.1);
+        final Box yAxis = new Box(0.1, AXIS_LENGTH, 0.1);
+        final Box zAxis = new Box(0.1, 0.1, AXIS_LENGTH);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
@@ -115,11 +121,14 @@ public class visualise extends Application{
         
         for (point p : points){
             Xform pointXform = new Xform();
-            Sphere pointSphere = new Sphere(1.0);
+            Sphere pointSphere = new Sphere(0.01);
             pointSphere.setMaterial(redMaterial);
             pointSphere.setTranslateX(p.getX());
             pointSphere.setTranslateY(p.getY());
             pointSphere.setTranslateZ(p.getZ());
+
+            // debug
+            System.out.println("x: " + p.getX() + "   y: " + p.getY() + "   z: " + p.getZ());
 
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
