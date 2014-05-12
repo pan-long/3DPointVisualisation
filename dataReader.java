@@ -6,7 +6,13 @@ import java.util.List;
 
 
 class dataReader{
-	public List<point> getPoints(String filePath){
+	private String filePath;
+	
+	public dataReader(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	public List<point> getPoints(){
 		List<point> points = new ArrayList<point>();;
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
