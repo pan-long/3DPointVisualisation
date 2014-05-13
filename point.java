@@ -1,4 +1,5 @@
-public class point{
+public class point
+{
     private double x, y, z;
 
     public point(double x, double y, double z)
@@ -23,3 +24,4 @@ public class point{
         return this.z;
     }
 }
+
