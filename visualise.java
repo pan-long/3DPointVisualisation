@@ -33,6 +33,7 @@ public class visualise extends Application
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
+    private static final double SPHERE_RADIUS = 0.01;
 
     private double mousePosX;
     private double mousePosY;
@@ -188,7 +189,8 @@ public class visualise extends Application
 
         Collections.sort(pointsList);
         double radius = getMinDis(0, pointsList.size() - 1) / 2;
-        System.out.println(radius);
+        if (radius < 1E-9)
+            radius = SPHERE_RADIUS;
 
         buildCamera();
         buildAxes();
