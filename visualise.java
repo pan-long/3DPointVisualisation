@@ -32,10 +32,10 @@ public class visualise extends Application
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
     final Slider scaleSlider = buildScaleSlider();
-    
+
     private static final double CAMERA_INITIAL_DISTANCE = -450;
-    private static final double CAMERA_INITIAL_X_ANGLE = 45.0;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 45.0;
+    private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
     private static final double AXIS_LENGTH = 2.0;
@@ -147,11 +147,18 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
-                    System.out.println("x Angle: " + cameraXform.rx.getAngle());
-                    System.out.println("y Angle: " + cameraXform.ry.getAngle());
+                    System.out.println("x: " + cameraXform.rx.getAngle());
+                    System.out.println("y: " + cameraXform.ry.getAngle());
 
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    /* if (((int)cameraXform.rx.getAngle() + 90) / 180 % 2 != 0) */
+                        cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    /* else */
+                    /*     cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED); */
+
+                    /* if (((int)cameraXform.ry.getAngle() + 90) / 180 % 2 != 0) */
+                        cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    /* else */
+                    /*     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED); */
                 }
             }
         });
@@ -259,10 +266,11 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
     }
 
-    private VBox buildLeftVbox(){
+    private VBox buildLeftVbox()
+    {
         VBox vbox = new VBox();
-        vbox.setPadding(new Insets(10)); 
-        vbox.setSpacing(8); 
+        vbox.setPadding(new Insets(10));
+        vbox.setSpacing(8);
 
         Text title = new Text("Settings");
         Text scaleSliderText = new Text("Scale");
@@ -275,12 +283,13 @@ public class visualise extends Application
         return vbox;
     }
 
-    private SubScene buildSubScene(){
-       SubScene subScene = new SubScene(root, 900, 768, true, SceneAntialiasing.DISABLED);
+    private SubScene buildSubScene()
+    {
+        SubScene subScene = new SubScene(root, 900, 768, true, SceneAntialiasing.DISABLED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
-        
-        return subScene; 
+
+        return subScene;
     }
 
     @Override
@@ -315,7 +324,7 @@ public class visualise extends Application
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox());
         Scene scene = new Scene(borderPane, 1024, 768, true);
-        
+
         handleMouse(scene, space);
 
         primaryStage.setTitle("3D Point Visualisation");
@@ -328,3 +337,4 @@ public class visualise extends Application
         launch(args);
     }
 }
+
