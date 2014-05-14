@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.geometry.Insets;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class visualise extends Application
 {
@@ -31,7 +33,6 @@ public class visualise extends Application
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
-    final Slider scaleSlider = buildScaleSlider();
     
     private static final double CAMERA_INITIAL_DISTANCE = -450;
     private static final double CAMERA_INITIAL_X_ANGLE = 45.0;
@@ -55,21 +56,6 @@ public class visualise extends Application
     private List<point> pointsList = null;
 
     private Stage stage = null;
-
-    private Slider buildScaleSlider()
-    {
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(100);
-        slider.setValue(40);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(50);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(10);
-
-        return slider;
-    }
 
     private void buildCamera()
     {
@@ -265,14 +251,64 @@ public class visualise extends Application
         vbox.setSpacing(8); 
 
         Text title = new Text("Settings");
-        Text scaleSliderText = new Text("Scale");
+        Text cameraDistanceLabel = new Text("Camera Distance");
+        Text fielOfViewLabel = new Text("Field of View");
+
+        Slider cameraDistanceSlider = buildCameraDistanceSlider();
+        Slider fieldOfViewSlider = buildSlider();
+
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
         vbox.getChildren().add(title);
-        vbox.getChildren().add(scaleSliderText);
-        vbox.getChildren().add(scaleSlider);
+        vbox.getChildren().add(cameraDistanceLabel);
+        vbox.getChildren().add(cameraDistanceSlider);
+        vbox.getChildren().add(fielOfViewLabel);
+        vbox.getChildren().add(fieldOfViewSlider);
 
         return vbox;
+    }
+
+    private Slider buildCameraDistanceSlider(){
+        Slider slider = new Slider();
+        slider.setMin(0.25);
+        slider.setMax(1.75);
+        slider.setValue(1);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(0.5);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(0.05);
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    camera.setTranslateZ(new_val.doubleValue() * -450);
+            }
+        });
+
+        return slider;
+    }
+
+    private Slider buildSlider()
+    {
+        Slider slider = new Slider();
+        slider.setMin(0.25);
+        slider.setMax(1.75);
+        slider.setValue(1);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(0.5);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(0.05);
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                camera.setFieldOfView(new_val.doubleValue() * 0.2);
+            }
+        });
+
+        return slider;
     }
 
     private SubScene buildSubScene(){
