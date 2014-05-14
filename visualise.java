@@ -8,6 +8,7 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,6 +40,8 @@ public class visualise extends Application
     private double mouseOldY;
     private double mouseDeltaX;
     private double mouseDeltaY;
+
+    private List<point> pointsList = null;
 
     private void buildCamera()
     {
@@ -121,7 +124,30 @@ public class visualise extends Application
         });
     }
 
-    private void buildPoints(List<point> points)
+    private double getMinDis(int start, int end)
+    {
+        if (start >= end)
+            return Double.MAX_VALUE;
+        else
+        {
+            int middle = (start + end) / 2;
+            double d1 = getMinDis(start, middle);
+            double d2 = getMinDis(middle + 1, end);
+
+            double d3 = d1;
+            for (int i = start; i <= middle; i ++)
+                for (int j = middle + 1; j <= end; j ++)
+                    if (pointsList.get(i).getX() - pointsList.get(j).getX() <= d3)
+                        d3 = Math.min(d3, pointsList.get(i).disTo(pointsList.get(j)));
+
+            double minD = Math.min(d1, d2);
+            minD = Math.min(minD, d3);
+
+            return minD;
+        }
+    }
+
+    private void buildPoints(double radius)
     {
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);
@@ -129,17 +155,14 @@ public class visualise extends Application
 
         Xform pointsXform = new Xform();
 
-        for (point p : points)
+        for (point p : pointsList)
         {
             Xform pointXform = new Xform();
-            Sphere pointSphere = new Sphere(0.01);
+            Sphere pointSphere = new Sphere(radius);
             pointSphere.setMaterial(redMaterial);
             pointSphere.setTranslateX(p.getX());
             pointSphere.setTranslateY(p.getY());
             pointSphere.setTranslateZ(p.getZ());
-
-            // debug
-            System.out.println("x: " + p.getX() + "   y: " + p.getY() + "   z: " + p.getZ());
 
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
@@ -161,11 +184,15 @@ public class visualise extends Application
 
         dataReader dr = new dataReader(filename);
 
-        List<point> pointsList = dr.getPoints();
+        pointsList = dr.getPoints();
+
+        Collections.sort(pointsList);
+        double radius = getMinDis(0, pointsList.size() - 1) / 2;
+        System.out.println(radius);
 
         buildCamera();
         buildAxes();
-        buildPoints(pointsList);
+        buildPoints(radius);
 
         Scene scene = new Scene(root, 1024, 768, true);
         scene.setFill(Color.GREY);
@@ -183,4 +210,6 @@ public class visualise extends Application
         launch(args);
     }
 }
+
+
 
