@@ -3,6 +3,7 @@ import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.stage.Popup;
 import javafx.scene.paint.PhongMaterial;
@@ -13,7 +14,14 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import java.util.Collections;
 import java.util.List;
+import javafx.scene.SubScene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import java.util.Scanner;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.geometry.Insets;
 
 public class visualise extends Application
 {
@@ -23,9 +31,8 @@ public class visualise extends Application
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
-    /* final Xform cameraXform2 = new Xform(); */
-    /* final Xform cameraXform3 = new Xform(); */
-
+    final Slider scaleSlider = buildScaleSlider();
+    
     private static final double CAMERA_INITIAL_DISTANCE = -450;
     private static final double CAMERA_INITIAL_X_ANGLE = 45.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 45.0;
@@ -48,6 +55,21 @@ public class visualise extends Application
     private List<point> pointsList = null;
 
     private Stage stage = null;
+
+    private Slider buildScaleSlider()
+    {
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(100);
+        slider.setValue(40);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(10);
+
+        return slider;
+    }
 
     private void buildCamera()
     {
@@ -237,13 +259,37 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
     }
 
+    private VBox buildLeftVbox(){
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10)); 
+        vbox.setSpacing(8); 
+
+        Text title = new Text("Settings");
+        Text scaleSliderText = new Text("Scale");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+        vbox.getChildren().add(title);
+        vbox.getChildren().add(scaleSliderText);
+        vbox.getChildren().add(scaleSlider);
+
+        return vbox;
+    }
+
+    private SubScene buildSubScene(){
+       SubScene subScene = new SubScene(root, 900, 768, true, SceneAntialiasing.DISABLED);
+        subScene.setCamera(camera);
+        subScene.setFill(Color.GREY);
+        
+        return subScene; 
+    }
+
     @Override
     public void start(Stage primaryStage)
     {
-        stage = primaryStage;
-
+        BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
+        stage = primaryStage;
 
         /* Scanner sr = new Scanner(System.in); */
         /* String filename = sr.next(); */
@@ -257,6 +303,7 @@ public class visualise extends Application
         double radius = getMinDis(0, pointsList.size() - 1) / 2;
         if (radius < 1E-9)
             radius = SPHERE_RADIUS;
+        radius = 0.01;
 
         // debug
         radius = 0.01;
@@ -265,15 +312,15 @@ public class visualise extends Application
         buildAxes();
         buildPoints(radius);
 
-        Scene scene = new Scene(root, 1024, 768, true);
-        scene.setFill(Color.GREY);
+        borderPane.setCenter(buildSubScene());
+        borderPane.setLeft(buildLeftVbox());
+        Scene scene = new Scene(borderPane, 1024, 768, true);
+        
         handleMouse(scene, space);
 
         primaryStage.setTitle("3D Point Visualisation");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        scene.setCamera(camera);
     }
 
     public static void main(String[] args)
