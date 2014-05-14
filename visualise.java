@@ -24,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.CheckBox;
 
 public class visualise extends Application
 {
@@ -262,7 +263,8 @@ public class visualise extends Application
         Text fielOfViewLabel = new Text("Field of View");
 
         Slider cameraDistanceSlider = buildCameraDistanceSlider();
-        Slider fieldOfViewSlider = buildSlider();
+        Slider fieldOfViewSlider = buildFieldOfViewSlider();
+        CheckBox axesCheckBox = buildShowAxesCheckBox();
 
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
@@ -271,6 +273,7 @@ public class visualise extends Application
         vbox.getChildren().add(cameraDistanceSlider);
         vbox.getChildren().add(fielOfViewLabel);
         vbox.getChildren().add(fieldOfViewSlider);
+        vbox.getChildren().add(axesCheckBox);
 
         return vbox;
     }
@@ -299,7 +302,7 @@ public class visualise extends Application
         return slider;
     }
 
-    private Slider buildSlider()
+    private Slider buildFieldOfViewSlider()
     {
         Slider slider = new Slider();
         slider.setMin(0.25);
@@ -322,6 +325,21 @@ public class visualise extends Application
 
         return slider;
     }
+
+    private CheckBox buildShowAxesCheckBox(){
+        CheckBox cb = new CheckBox();
+        cb.setText("Show Axes");
+        cb.setSelected(true);
+
+        cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                Boolean old_val, Boolean new_val) {
+                axisGroup.setVisible(new_val);
+            }
+        });
+
+        return cb;
+    }   
 
     private SubScene buildSubScene()
     {
