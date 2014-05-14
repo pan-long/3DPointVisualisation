@@ -370,7 +370,6 @@ public class visualise extends Application
         double radius = getMinDis(0, pointsList.size() - 1) / 2;
         if (radius < 1E-9)
             radius = SPHERE_RADIUS;
-        radius = 0.01;
 
         // debug
         radius = 0.01;
