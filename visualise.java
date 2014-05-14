@@ -23,15 +23,15 @@ public class visualise extends Application
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
-    final Xform cameraXform2 = new Xform();
-    final Xform cameraXform3 = new Xform();
+    /* final Xform cameraXform2 = new Xform(); */
+    /* final Xform cameraXform3 = new Xform(); */
 
     private static final double CAMERA_INITIAL_DISTANCE = -450;
-    private static final double CAMERA_INITIAL_X_ANGLE = 70.0;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 320.0;
+    private static final double CAMERA_INITIAL_X_ANGLE = 45.0;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 45.0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
-    private static final double AXIS_LENGTH = 250.0;
+    private static final double AXIS_LENGTH = 2.0;
     private static final double HYDROGEN_ANGLE = 104.5;
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
@@ -52,10 +52,12 @@ public class visualise extends Application
     private void buildCamera()
     {
         root.getChildren().add(cameraXform);
-        cameraXform.getChildren().add(cameraXform2);
-        cameraXform2.getChildren().add(cameraXform3);
-        cameraXform3.getChildren().add(camera);
-        cameraXform3.setRotateZ(180.0);
+        /* cameraXform.getChildren().add(cameraXform2); */
+        /* cameraXform2.getChildren().add(cameraXform3); */
+        /* cameraXform3.getChildren().add(camera); */
+        /* cameraXform3.setRotateZ(180.0); */
+        cameraXform.getChildren().add(camera);
+        cameraXform.setRotateZ(180.0);
 
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
@@ -63,7 +65,7 @@ public class visualise extends Application
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
 
-        camera.setFieldOfView(0.3);
+        camera.setFieldOfView(0.2);
     }
 
     private void buildAxes()
@@ -89,7 +91,7 @@ public class visualise extends Application
         zAxis.setMaterial(blueMaterial);
 
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        axisGroup.setVisible(false);
+        axisGroup.setVisible(true);
         space.getChildren().addAll(axisGroup);
     }
 
@@ -123,6 +125,9 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
+                    System.out.println("x Angle: " + cameraXform.rx.getAngle());
+                    System.out.println("y Angle: " + cameraXform.ry.getAngle());
+
                     cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
@@ -197,6 +202,7 @@ public class visualise extends Application
             z.setText("z: " + p.getZ());
 
             box.getChildren().addAll(x, y, z);
+            box.setStyle("-fx-background-color: white;");
 
             Popup pop = new Popup();
 
@@ -209,8 +215,9 @@ public class visualise extends Application
                 @Override
                 public void handle(MouseEvent me)
                 {
-                    pop.setX(me.getSceneX());
-                    pop.setY(me.getSceneY());
+                    pop.setX(me.getSceneX() + pop.getWidth());
+                    pop.setY(me.getSceneY() - 2 * pop.getHeight() / 3);
+
                     pop.show(stage);
                 }
             });
@@ -251,6 +258,9 @@ public class visualise extends Application
         if (radius < 1E-9)
             radius = SPHERE_RADIUS;
 
+        // debug
+        radius = 0.01;
+
         buildCamera();
         buildAxes();
         buildPoints(radius);
@@ -271,10 +281,3 @@ public class visualise extends Application
         launch(args);
     }
 }
-
-
-
-
-
-
-

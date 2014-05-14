@@ -53,7 +53,7 @@ public class Xform extends Group
             getTransforms().addAll(t, p, rx, rz, ry, s, ip);
             break;
         case ZXY:
-            getTransforms().addAll(t, p, ry, rx, rx, s, ip);
+            getTransforms().addAll(t, p, ry, rx, rz, s, ip);
             break;
         case ZYX:
             getTransforms().addAll(t, p, rx, ry, rz, s, ip);
