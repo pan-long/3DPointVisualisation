@@ -52,6 +52,7 @@ public class visualise extends Application
     private double mouseOldY;
     private double mouseDeltaX;
     private double mouseDeltaY;
+    private double x;
 
     private List<point> pointsList = null;
 
@@ -114,6 +115,7 @@ public class visualise extends Application
                 mousePosY = me.getSceneY();
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
+                x = cameraXform.rx.getAngle();
             }
         });
 
@@ -136,15 +138,12 @@ public class visualise extends Application
                     System.out.println("x: " + cameraXform.rx.getAngle());
                     System.out.println("y: " + cameraXform.ry.getAngle());
 
-                    /* if (((int)cameraXform.rx.getAngle() + 90) / 180 % 2 != 0) */
-                    cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
-                    /* else */
-                    /*     cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED); */
+                    if (((x % 360 > 0 && x % 360 < 90) || (x % 360 < 0 && x % 360 + 360 < 90)) || (x % 360 > 270 || (x % 360 < 0 && x % 360 + 360 > 270)))
+                        cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    else
+                        cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
 
-                    /* if (((int)cameraXform.ry.getAngle() + 90) / 180 % 2 != 0) */
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
-                    /* else */
-                    /*     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED); */
+                        cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
@@ -378,5 +377,6 @@ public class visualise extends Application
         launch(args);
     }
 }
+
 
 
