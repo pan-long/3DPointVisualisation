@@ -1,7 +1,10 @@
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.stage.Popup;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.Box;
@@ -43,6 +46,8 @@ public class visualise extends Application
     private double mouseDeltaY;
 
     private List<point> pointsList = null;
+
+    private Stage stage = null;
 
     private void buildCamera()
     {
@@ -128,21 +133,36 @@ public class visualise extends Application
     private double getMinDis(int start, int end)
     {
         if (start >= end)
-            return Double.MAX_VALUE;
+            /* return Double.MAX_VALUE; */
+            return 0;
         else
         {
             int middle = (start + end) / 2;
             double d1 = getMinDis(start, middle);
             double d2 = getMinDis(middle + 1, end);
 
-            double d3 = d1;
+            double d3 = Double.MAX_VALUE;
             for (int i = start; i <= middle; i ++)
                 for (int j = middle + 1; j <= end; j ++)
                     if (pointsList.get(i).getX() - pointsList.get(j).getX() <= d3)
-                        d3 = Math.min(d3, pointsList.get(i).disTo(pointsList.get(j)));
+                    {
+                        double dis = pointsList.get(i).disTo(pointsList.get(j));
+                        if (dis > 0.0)
+                            d3 = Math.min(d3, dis);
+                    }
 
-            double minD = Math.min(d1, d2);
-            minD = Math.min(minD, d3);
+            /* double minD = Math.min(d1, d2); */
+            /* minD = Math.min(minD, d3); */
+
+            /* return minD; */
+
+            double minD = Double.MAX_VALUE;
+            if (d1 > 0)
+                minD = Math.min(minD, d1);
+            if (d2 > 0)
+                minD = Math.min(minD, d2);
+            if (d3 > 0)
+                minD = Math.min(minD, d3);
 
             return minD;
         }
@@ -167,6 +187,43 @@ public class visualise extends Application
 
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
+
+            VBox box = new VBox();
+            Label x = new Label();
+            x.setText("x: " + p.getX());
+            Label y = new Label();
+            y.setText("y: " + p.getY());
+            Label z = new Label();
+            z.setText("z: " + p.getZ());
+
+            box.getChildren().addAll(x, y, z);
+
+            Popup pop = new Popup();
+
+            pop.setAutoFix(false);
+            pop.setHideOnEscape(true);
+            pop.getContent().addAll(box);
+
+            pointXform.setOnMouseMoved(new EventHandler<MouseEvent>()
+            {
+                @Override
+                public void handle(MouseEvent me)
+                {
+                    pop.setX(me.getSceneX());
+                    pop.setY(me.getSceneY());
+                    pop.show(stage);
+                }
+            });
+
+            pointXform.setOnMouseExited(new EventHandler<MouseEvent>()
+            {
+                @Override
+                public void handle(MouseEvent me)
+                {
+                    if (pop.isShowing())
+                        pop.hide();
+                }
+            });
         }
 
         pointGroup.getChildren().add(pointsXform);
@@ -176,6 +233,8 @@ public class visualise extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        stage = primaryStage;
+
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
 
@@ -212,6 +271,10 @@ public class visualise extends Application
         launch(args);
     }
 }
+
+
+
+
 
 
 
