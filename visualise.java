@@ -136,8 +136,8 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
-                    System.out.println("x: " + cameraXform.rx.getAngle());
-                    System.out.println("y: " + cameraXform.ry.getAngle());
+                    /* System.out.println("x: " + cameraXform.rx.getAngle()); */
+                    /* System.out.println("y: " + cameraXform.ry.getAngle()); */
 
                     if (((x % 360 > 0 && x % 360 < 90) || (x % 360 < 0 && x % 360 + 360 < 90)) || (x % 360 > 270 || (x % 360 < 0 && x % 360 + 360 > 270)))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
