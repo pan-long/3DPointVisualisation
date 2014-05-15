@@ -397,12 +397,12 @@ public class visualise extends Application
 
     private void reset()
     {
-        Group root = new Group();
-        Xform axisGroup = new Xform();
-        Xform pointGroup = new Xform();
-        Xform space = new Xform();
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        Xform cameraXform = new Xform();
+        root = new Group();
+        axisGroup = new Xform();
+        pointGroup = new Xform();
+        space = new Xform();
+        camera = new PerspectiveCamera(true);
+        cameraXform = new Xform();
 
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
