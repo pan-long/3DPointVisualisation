@@ -17,7 +17,6 @@ import java.util.List;
 import javafx.scene.SubScene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import java.util.Scanner;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -322,8 +321,6 @@ public class visualise extends Application
         root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
-        /* Scanner sr = new Scanner(System.in); */
-        /* String filename = sr.next(); */
         String filename = "data.PCD";
 
         dataReader dr = new dataReader(filename);
