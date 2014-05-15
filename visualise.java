@@ -369,7 +369,7 @@ public class visualise extends Application
         // pointsList = dr.getPoints();
 
         borderPane.setCenter(buildSubScene());
-        borderPane.setLeft(buildLeftVbox());
+        borderPane.setLeft(buildLeftVbox(stage));
         Scene scene = new Scene(borderPane, 1024, 768, true);
 
         handleMouse(scene, space);
