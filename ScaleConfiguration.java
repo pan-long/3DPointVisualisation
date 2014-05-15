@@ -2,7 +2,7 @@ import java.util.Collections;
 import java.util.List;
 
 class ScaleConfiguration {
-    private final double cameraDistance = -450;
+    private final double cameraDistance = -100;
     private final double fieldOfView = 45;
 
     private List<point> pointsList = null;
@@ -14,9 +14,10 @@ class ScaleConfiguration {
     {
         this.pointsList = pointsList;
         Collections.sort(this.pointsList);
+
         this.maxAbsCoor = maxAbsCoor;
         this.scaleFactor = calculateScaleFactor();
-        this.radius = calculateMinDis(0, pointsList.size() - 1) / 2 * scaleFactor;
+        this.radius = (calculateMinDis(0, this.pointsList.size() - 1) / 2) * this.scaleFactor;
     }
 
     public double getScaleFactor()
@@ -45,7 +46,6 @@ class ScaleConfiguration {
     private double calculateMinDis(int start, int end)
     {
         if (start >= end)
-            /* return Double.MAX_VALUE; */
             return 0;
         else
         {
@@ -59,7 +59,7 @@ class ScaleConfiguration {
                     if (pointsList.get(i).getX() - pointsList.get(j).getX() <= d3)
                     {
                         double dis = pointsList.get(i).disTo(pointsList.get(j));
-                        if (dis > 0.0)
+                        if (dis > 0)
                             d3 = Math.min(d3, dis);
                     }
 

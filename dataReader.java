@@ -28,6 +28,11 @@ class dataReader
         bindListenerToButton();
     }
 
+    public dataReader(String filename)
+    {
+        openFile(new File(filename));
+    }
+
     public List<point> getPoints()
     {
         return points;
@@ -71,9 +76,3 @@ class dataReader
         }
     }
 }
-
-
-
-
-
-
