@@ -44,6 +44,7 @@ class dataReader
             new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(final ActionEvent e) {
+                    configureFileChooser(fileChooser);
                     File file = fileChooser.showOpenDialog(stage);
                     if (file != null) {
                         label.setText(file.getName());
@@ -51,6 +52,14 @@ class dataReader
                     }
                 }
             });
+    }
+
+    private void configureFileChooser(
+        final FileChooser fileChooser) {                   
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PCL", "*.pcl"),
+                new FileChooser.ExtensionFilter("PCD", "*.pcd")
+            );
     }
 
     private void openFile(File file)
