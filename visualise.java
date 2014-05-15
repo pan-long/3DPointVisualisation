@@ -149,13 +149,13 @@ public class visualise extends Application
                     else
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
 
-                        cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
     }
 
-    
+
     private void buildPoints()
     {
         final PhongMaterial redMaterial = new PhongMaterial();
@@ -209,7 +209,7 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
     }
 
-    private VBox buildLeftVbox(Stage stage)
+    private VBox buildLeftVbox()
     {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
@@ -226,7 +226,7 @@ public class visualise extends Application
         Button buildButton = new Button("Build");
         FileChooser fileChooser = new FileChooser();
 
-        reader = new dataReader(fileChooser, openButton, stage);
+        reader = new dataReader(fileChooser, openButton);
         buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
@@ -290,20 +290,23 @@ public class visualise extends Application
         return slider;
     }
 
-    private CheckBox buildShowAxesCheckBox(){
+    private CheckBox buildShowAxesCheckBox()
+    {
         CheckBox cb = new CheckBox();
         cb.setText("Show Axes");
         cb.setSelected(true);
 
-        cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        cb.selectedProperty().addListener(new ChangeListener<Boolean>()
+        {
             public void changed(ObservableValue<? extends Boolean> ov,
-                Boolean old_val, Boolean new_val) {
+                                Boolean old_val, Boolean new_val)
+            {
                 axisGroup.setVisible(new_val);
             }
         });
 
         return cb;
-    }   
+    }
 
     private SubScene buildSubScene()
     {
@@ -314,30 +317,40 @@ public class visualise extends Application
         return subScene;
     }
 
-    private void buildVisualization(Button button){
+    private void buildVisualization(Button button)
+    {
         button.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                    if (reader.getPoints() == null){
+            new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(final ActionEvent e)
+            {
+                if (reader.getPoints() == null)
+                {
 
-                    } else {
-                        reset();
-                        pointsList = reader.getPoints();
-                        Collections.sort(pointsList);
-                        double radius = getMinDis(0, pointsList.size() - 1) / 2;
-                        if (radius < 1E-9)
-                            radius = SPHERE_RADIUS;
-
-                        buildCamera();
-                        buildAxes();
-                        buildPoints(radius);
-                    }
                 }
-            });
+                else
+                {
+                    reset();
+                    pointsList = reader.getPoints();
+
+                    ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
+
+                    scaleFactor = sc.getScaleFactor();
+                    sphereRadius = sc.getRadius();
+                    cameraDistance = sc.getCameraDistance();
+                    cameraFieldOfView = sc.getFieldOfView();
+
+                    buildCamera();
+                    buildAxes();
+                    buildPoints();
+                }
+            }
+        });
     }
 
-    private void reset(){
+    private void reset()
+    {
 
     }
 
@@ -355,19 +368,8 @@ public class visualise extends Application
 
         // pointsList = dr.getPoints();
 
-        ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
-
-        this.scaleFactor = sc.getScaleFactor();
-        this.sphereRadius = sc.getRadius();
-        this.cameraDistance = sc.getCameraDistance();
-        this.cameraFieldOfView = sc.getFieldOfView();
-
-        buildCamera();
-        buildAxes();
-        buildPoints();
-
         borderPane.setCenter(buildSubScene());
-        borderPane.setLeft(buildLeftVbox(stage));
+        borderPane.setLeft(buildLeftVbox());
         Scene scene = new Scene(borderPane, 1024, 768, true);
 
         handleMouse(scene, space);
@@ -382,3 +384,4 @@ public class visualise extends Application
         launch(args);
     }
 }
+
