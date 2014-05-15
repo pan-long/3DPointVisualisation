@@ -181,7 +181,7 @@ public class visualise extends Application
                 public void handle(MouseEvent me)
                 {
                     pop.setX(me.getSceneX() + pop.getWidth());
-                    pop.setY(me.getSceneY() - pop.getHeight() + sphereRadius);
+                    pop.setY(me.getSceneY() - pop.getHeight() + pop.getHeight() / 4.0);
 
                     pop.show(stage);
                 }
@@ -362,8 +362,8 @@ public class visualise extends Application
     public void start(Stage primaryStage)
     {
         BorderPane borderPane = new BorderPane();
-        /* root.getChildren().add(space); */
-        /* root.setDepthTest(DepthTest.ENABLE); */
+        root.getChildren().add(space);
+        root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
         String filename = "data.PCD";
@@ -377,6 +377,10 @@ public class visualise extends Application
         sphereRadius = sc.getRadius();
         cameraDistance = sc.getCameraDistance();
         cameraFieldOfView = sc.getFieldOfView();
+        System.out.println(scaleFactor);
+        System.out.println(sphereRadius);
+        System.out.println(cameraDistance);
+        System.out.println(cameraFieldOfView);
 
         buildCamera();
         buildAxes();
