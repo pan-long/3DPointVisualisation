@@ -31,12 +31,12 @@ import javafx.event.ActionEvent;
 
 public class visualise extends Application
 {
-    final Group root = new Group();
-    final Xform axisGroup = new Xform();
-    final Xform pointGroup = new Xform();
-    final Xform space = new Xform();
-    final PerspectiveCamera camera = new PerspectiveCamera(true);
-    final Xform cameraXform = new Xform();
+    private Group root = new Group();
+    private Xform axisGroup = new Xform();
+    private Xform pointGroup = new Xform();
+    private Xform space = new Xform();
+    private PerspectiveCamera camera = new PerspectiveCamera(true);
+    private Xform cameraXform = new Xform();
 
     private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
@@ -344,15 +344,23 @@ public class visualise extends Application
 
     private void reset()
     {
+        Group root = new Group();
+        Xform axisGroup = new Xform();
+        Xform pointGroup = new Xform();
+        Xform space = new Xform();
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        Xform cameraXform = new Xform();
 
+        root.getChildren().add(space);
+        root.setDepthTest(DepthTest.ENABLE);
     }
 
     @Override
     public void start(Stage primaryStage)
     {
         BorderPane borderPane = new BorderPane();
-        root.getChildren().add(space);
-        root.setDepthTest(DepthTest.ENABLE);
+        /* root.getChildren().add(space); */
+        /* root.setDepthTest(DepthTest.ENABLE); */
         stage = primaryStage;
 
         String filename = "data.PCD";
@@ -373,4 +381,5 @@ public class visualise extends Application
         launch(args);
     }
 }
+
 
