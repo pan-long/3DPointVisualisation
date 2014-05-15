@@ -28,6 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.stage.StageStyle;
 
 public class visualise extends Application
 {
@@ -323,7 +324,11 @@ public class visualise extends Application
             {
                 if (reader.getPoints() == null)
                 {
-
+                    Stage dialog = new Stage();
+                    //dialog.initStyle(StageStyle.TRANSPARENT);
+                    Scene scene = new Scene(new Group(new Text(100, 50, "Hello World!")));
+                    dialog.setScene(scene);
+                    dialog.show();
                 }
                 else
                 {
