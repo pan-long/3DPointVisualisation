@@ -67,10 +67,6 @@ public class visualise extends Application
     private void buildCamera()
     {
         root.getChildren().add(cameraXform);
-        /* cameraXform.getChildren().add(cameraXform2); */
-        /* cameraXform2.getChildren().add(cameraXform3); */
-        /* cameraXform3.getChildren().add(camera); */
-        /* cameraXform3.setRotateZ(180.0); */
         cameraXform.getChildren().add(camera);
         cameraXform.setRotateZ(180.0);
 
@@ -99,7 +95,7 @@ public class visualise extends Application
 
         final Box xAxis = new Box(3 * MAX_ABS_COORDINATE, sphereRadius, sphereRadius);
         final Box yAxis = new Box(sphereRadius, 3 * MAX_ABS_COORDINATE, sphereRadius);
-        final Box zAxis = new Box(sphereRadius, sphereRadius, MAX_ABS_COORDINATE);
+        final Box zAxis = new Box(sphereRadius, sphereRadius, 3 * MAX_ABS_COORDINATE);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
