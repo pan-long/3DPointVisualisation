@@ -40,6 +40,8 @@ public class visualise extends Application
 
     private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
+    private static final double CAMERA_NEAR_CLIP = 0.1;
+    private static final double CAMERA_FAR_CLIP = 10000;
 
     private static final double MAX_ABS_COORDINATE = 10;
     private static final double HYDROGEN_ANGLE = 104.5;
@@ -70,8 +72,8 @@ public class visualise extends Application
         cameraXform.getChildren().add(camera);
         cameraXform.setRotateZ(180.0);
 
-        camera.setNearClip(cameraDistance * 0.0001);
-        camera.setFarClip(cameraDistance * 10000);
+        camera.setNearClip(CAMERA_NEAR_CLIP);
+        camera.setFarClip(CAMERA_FAR_CLIP);
         camera.setTranslateZ(cameraDistance);
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
@@ -137,7 +139,8 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
-                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90)) || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
+                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90)) 
+                        || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
@@ -180,8 +183,8 @@ public class visualise extends Application
                 @Override
                 public void handle(MouseEvent me)
                 {
-                    pop.setX(me.getSceneX() + pop.getWidth());
-                    pop.setY(me.getSceneY() - pop.getHeight() + pop.getHeight() / 4.0);
+                    pop.setX(me.getSceneX());
+                    pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
 
                     pop.show(stage);
                 }
@@ -381,10 +384,6 @@ public class visualise extends Application
         sphereRadius = sc.getRadius();
         cameraDistance = sc.getCameraDistance();
         cameraFieldOfView = sc.getFieldOfView();
-        System.out.println(scaleFactor);
-        System.out.println(sphereRadius);
-        System.out.println(cameraDistance);
-        System.out.println(cameraFieldOfView);
 
         buildCamera();
         buildAxes();
