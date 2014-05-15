@@ -137,9 +137,6 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
-                    /* System.out.println("x: " + cameraXform.rx.getAngle()); */
-                    /* System.out.println("y: " + cameraXform.ry.getAngle()); */
-
                     if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90)) || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
@@ -255,7 +252,7 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                camera.setTranslateZ(new_val.doubleValue() * -450);
+                camera.setTranslateZ(new_val.doubleValue() * cameraDistance);
             }
         });
 
@@ -279,7 +276,7 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                camera.setFieldOfView(new_val.doubleValue() * 0.2);
+                camera.setFieldOfView(new_val.doubleValue() * cameraFieldOfView);
             }
         });
 
@@ -306,7 +303,7 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 900, 768, true, SceneAntialiasing.DISABLED);
+        SubScene subScene = new SubScene(root, 900, 768, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
@@ -359,10 +356,6 @@ public class visualise extends Application
         stage = primaryStage;
 
         String filename = "data.PCD";
-
-        // dataReader dr = new dataReader(filename);
-
-        // pointsList = dr.getPoints();
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox(stage));
