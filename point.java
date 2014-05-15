@@ -1,10 +1,7 @@
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-
 public class point implements Comparable<point>
 {
     private double x, y, z;
-    private VBox popupBox = null;
+    private String[] properties = null;
 
     public point(double x, double y, double z)
     {
@@ -28,52 +25,45 @@ public class point implements Comparable<point>
         return this.z;
     }
 
-    public VBox getBox()
+    public String[] getProperties()
     {
-        return getXYZBox();
+        return getXYZProperties();
     }
 
-    public VBox getXYZBox()
+    public String[] getXYZProperties()
     {
-        if (popupBox != null)
-            return popupBox;
+        if (properties != null)
+            return properties;
         else
         {
-            popupBox = new VBox();
-            Label x = new Label();
-            x.setText("x: " + x);
-            Label y = new Label();
-            y.setText("y: " + y);
-            Label z = new Label();
-            z.setText("z: " + z);
-
-            popupBox.getChildren().addAll(x, y, z);
-            popupBox.setStyle("-fx-background-color: white;");
-
-            return popupBox;
+            properties = new String[3];
+            properties[0] = "x: " + this.x;
+            properties[1] = "y: " + this.y;
+            properties[2] = "z: " + this.z;
+            return properties;
         }
     }
 
     @Override
-    public int compareTo(point other)
-    {
-        if (other == null)
-            return 1;
-        else if (this.x > other.getX())
-            return 1;
-        else if (this.x < other.getX())
-            return -1;
-        else if (this.y > other.getY())
-            return 1;
-        else if (this.y < other.getY())
-            return -1;
-        else if (this.z > other.getZ())
-            return 1;
-        else if (this.z < other.getZ())
-            return -1;
-        else
-            return 0;
-    }
+        public int compareTo(point other)
+        {
+            if (other == null)
+                return 1;
+            else if (this.x > other.getX())
+                return 1;
+            else if (this.x < other.getX())
+                return -1;
+            else if (this.y > other.getY())
+                return 1;
+            else if (this.y < other.getY())
+                return -1;
+            else if (this.z > other.getZ())
+                return 1;
+            else if (this.z < other.getZ())
+                return -1;
+            else
+                return 0;
+        }
 
     public double disTo(point other)
     {
