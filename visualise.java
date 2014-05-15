@@ -68,6 +68,7 @@ public class visualise extends Application
     private dataReader reader = null;
     private Slider cameraDistanceSlider = null;
     private Slider fieldOfViewSlider = null;
+    private Slider sphereSlider = null;
 
     private void buildCamera()
     {
@@ -232,6 +233,7 @@ public class visualise extends Application
 
         cameraDistanceSlider = buildCameraDistanceSlider();
         fieldOfViewSlider = buildFieldOfViewSlider();
+        sphereSlider = buildSphereSlider();
         CheckBox axesCheckBox = buildShowAxesCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
@@ -279,6 +281,30 @@ public class visualise extends Application
     }
 
     private Slider buildFieldOfViewSlider()
+    {
+        Slider slider = new Slider();
+        slider.setMin(0.25);
+        slider.setMax(1.75);
+        slider.setValue(1);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(0.5);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(0.05);
+
+        slider.valueProperty().addListener(new ChangeListener<Number>()
+        {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val)
+            {
+                camera.setFieldOfView(new_val.doubleValue() * cameraFieldOfView);
+            }
+        });
+
+        return slider;
+    }
+
+    private Slider buildSphereSlider()
     {
         Slider slider = new Slider();
         slider.setMin(0.25);
