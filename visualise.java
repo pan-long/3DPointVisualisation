@@ -26,7 +26,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
-import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
 public class visualise extends Application
@@ -70,8 +69,8 @@ public class visualise extends Application
         cameraXform.getChildren().add(camera);
         cameraXform.setRotateZ(180.0);
 
-        camera.setNearClip(cameraDistance * 0.01);
-        camera.setFarClip(cameraDistance * 100);
+        camera.setNearClip(cameraDistance * 0.0001);
+        camera.setFarClip(cameraDistance * 10000);
         camera.setTranslateZ(cameraDistance);
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
