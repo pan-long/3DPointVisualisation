@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 import javafx.scene.SubScene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -63,6 +64,7 @@ public class visualise extends Application
     private double xAngle;
 
     private List<point> pointsList = null;
+    private List<Sphere> spheresList = null;
 
     private Stage stage = null;
     private dataReader reader = null;
@@ -162,11 +164,13 @@ public class visualise extends Application
         redMaterial.setSpecularColor(Color.RED);
 
         Xform pointsXform = new Xform();
+        spheresList = new ArrayList<Sphere> ();
 
         for (point p : pointsList)
         {
             Xform pointXform = new Xform();
             Sphere pointSphere = new Sphere(sphereRadius);
+            spheresList.add(pointSphere);
             pointSphere.setMaterial(redMaterial);
             pointSphere.setTranslateX(p.getX() * scaleFactor);
             pointSphere.setTranslateY(p.getY() * scaleFactor);
