@@ -209,7 +209,7 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
     }
 
-    private VBox buildLeftVbox()
+    private VBox buildLeftVbox(Stage stage)
     {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
@@ -226,7 +226,7 @@ public class visualise extends Application
         Button buildButton = new Button("Build");
         FileChooser fileChooser = new FileChooser();
 
-        reader = new dataReader(fileChooser, openButton);
+        reader = new dataReader(fileChooser, openButton, stage);
         buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
@@ -367,7 +367,7 @@ public class visualise extends Application
         buildPoints();
 
         borderPane.setCenter(buildSubScene());
-        borderPane.setLeft(buildLeftVbox());
+        borderPane.setLeft(buildLeftVbox(stage));
         Scene scene = new Scene(borderPane, 1024, 768, true);
 
         handleMouse(scene, space);

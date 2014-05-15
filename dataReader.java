@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
@@ -11,16 +12,18 @@ import javafx.event.ActionEvent;
 
 class dataReader
 {
-    private FileChooser fileChooser;
     private Button button;
+    private FileChooser fileChooser;
+    private Stage stage;
     private List<point> points;
 
-    public dataReader(FileChooser fileChooser, Button button){
+    public dataReader(FileChooser fileChooser, Button button, Stage stage){
         this.fileChooser = fileChooser;
         this.button = button;
+        this.stage = stage;
     }
 
-    public List<point> getPoints(file)
+    public List<point> getPoints()
     {
         return points != null ? points : null;
     }
