@@ -33,12 +33,12 @@ import javafx.stage.Modality;
 
 public class visualise extends Application
 {
-    private Group root = new Group();
-    private Xform axisGroup = new Xform();
-    private Xform pointGroup = new Xform();
-    private Xform space = new Xform();
-    private PerspectiveCamera camera = new PerspectiveCamera(true);
-    private Xform cameraXform = new Xform();
+    final Group root = new Group();
+    final Xform axisGroup = new Xform();
+    final Xform pointGroup = new Xform();
+    final Xform space = new Xform();
+    final PerspectiveCamera camera = new PerspectiveCamera(true);
+    final Xform cameraXform = new Xform();
 
     private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
