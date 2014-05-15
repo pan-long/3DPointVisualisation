@@ -394,6 +394,3 @@ public class visualise extends Application
         launch(args);
     }
 }
-
-
-
