@@ -30,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
+import javafx.util.StringConverter;
 
 public class visualise extends Application
 {
@@ -227,17 +228,19 @@ public class visualise extends Application
     {
         VBox vbox = new VBox();
         vbox.setSpacing(8);
-        vbox.setPrefWidth(200);
+        vbox.setPrefWidth(250);
         vbox.setPadding(new Insets(10));
         
         Text title = new Text("Settings");
         Text cameraDistanceLabel = new Text("Camera Distance");
         Text fielOfViewLabel = new Text("Field of View");
+        Text sphereLabel = new Text("Sphere Radius");
         Label fileNameLabel = new Label("No File Chosen");
 
         cameraDistanceSlider = buildCameraDistanceSlider();
         fieldOfViewSlider = buildFieldOfViewSlider();
         sphereSlider = buildSphereSlider();
+        
         CheckBox axesCheckBox = buildShowAxesCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
@@ -252,6 +255,8 @@ public class visualise extends Application
         vbox.getChildren().add(cameraDistanceSlider);
         vbox.getChildren().add(fielOfViewLabel);
         vbox.getChildren().add(fieldOfViewSlider);
+        vbox.getChildren().add(sphereLabel);
+        vbox.getChildren().add(sphereSlider);
         vbox.getChildren().add(axesCheckBox);
         vbox.getChildren().add(openButton);
         vbox.getChildren().add(fileNameLabel);
@@ -262,15 +267,7 @@ public class visualise extends Application
 
     private Slider buildCameraDistanceSlider()
     {
-        Slider slider = new Slider();
-        slider.setMin(0.25);
-        slider.setMax(1.75);
-        slider.setValue(1);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(0.5);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(0.05);
+        Slider slider = buildSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -286,15 +283,7 @@ public class visualise extends Application
 
     private Slider buildFieldOfViewSlider()
     {
-        Slider slider = new Slider();
-        slider.setMin(0.25);
-        slider.setMax(1.75);
-        slider.setValue(1);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(0.5);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(0.05);
+        Slider slider = buildSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -310,22 +299,61 @@ public class visualise extends Application
 
     private Slider buildSphereSlider()
     {
-        Slider slider = new Slider();
-        slider.setMin(0.25);
-        slider.setMax(1.75);
-        slider.setValue(1);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(0.5);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(0.05);
+        Slider slider = buildSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                camera.setFieldOfView(new_val.doubleValue() * cameraFieldOfView);
+                if (spheresList != null){
+                    for (Sphere sphere : spheresList) {
+                        sphere.setRadius(new_val.doubleValue() * sphereRadius);
+                    }
+                }
+            }
+        });
+
+        return slider;
+    }
+
+    private Slider buildSlider() 
+    {
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(8);
+        slider.setValue(4);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(0.2);
+
+        slider.setLabelFormatter(new StringConverter<Double>() {
+            @Override
+            public String toString(Double n) {
+                for (int i=1; i<5 ; i++) {
+                    if (n < i) {
+                        return "1/" + String.valueOf(6-i);
+                    }
+                }
+                
+                if (n < 5) {
+                    return "1";
+                }
+
+                for (int i=6; i<10 ; i++) {
+                    if (n < i) {
+                        return String.valueOf(i-4);
+                    }
+                }
+
+                return "";
+            }
+
+            @Override
+            public Double fromString(String s) {
+                return Double.valueOf(s);
             }
         });
 
