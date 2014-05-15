@@ -146,8 +146,8 @@ public class visualise extends Application
 
                 if (me.isPrimaryButtonDown())
                 {
-                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90)) 
-                        || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
+                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90))
+                            || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
@@ -166,7 +166,10 @@ public class visualise extends Application
         redMaterial.setSpecularColor(Color.RED);
 
         Xform pointsXform = new Xform();
-        spheresList = new ArrayList<Sphere> ();
+        if (spheresList == null)
+            spheresList = new ArrayList<Sphere> ();
+        else
+            spheresList.clear();
 
         for (point p : pointsList)
         {
@@ -230,7 +233,7 @@ public class visualise extends Application
         vbox.setSpacing(8);
         vbox.setPrefWidth(250);
         vbox.setPadding(new Insets(10));
-        
+
         Text title = new Text("Settings");
         Text cameraDistanceLabel = new Text("Camera Distance");
         Text fielOfViewLabel = new Text("Field of View");
@@ -389,7 +392,7 @@ public class visualise extends Application
 
     private VBox buildAlertBox(Stage dialog)
     {
-        VBox vbox= new VBox();
+        VBox vbox = new VBox();
         vbox.setSpacing(20);
         vbox.setPrefWidth(200);
         vbox.setPadding(new Insets(40));
@@ -402,18 +405,18 @@ public class visualise extends Application
 
         cancelAlert.setOnAction(
             new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(final ActionEvent e)
             {
-                @Override
-                public void handle(final ActionEvent e)
-                {
-                    dialog.close();
-                }
-            });   
+                dialog.close();
+            }
+        });
 
         vbox.getChildren().add(alertLabel);
         vbox.getChildren().add(cancelAlert);
 
-        return vbox; 
+        return vbox;
     }
 
     private void buildVisualization(Button button)
@@ -492,5 +495,6 @@ public class visualise extends Application
         launch(args);
     }
 }
+
 
 
