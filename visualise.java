@@ -368,6 +368,20 @@ public class visualise extends Application
 
         String filename = "data.PCD";
 
+        reader = new dataReader(filename);
+        pointsList = reader.getPoints();
+
+        ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
+
+        scaleFactor = sc.getScaleFactor();
+        sphereRadius = sc.getRadius();
+        cameraDistance = sc.getCameraDistance();
+        cameraFieldOfView = sc.getFieldOfView();
+
+        buildCamera();
+        buildAxes();
+        buildPoints();
+
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox(stage));
         Scene scene = new Scene(borderPane, 1024, 768, true);
