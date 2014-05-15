@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
@@ -13,19 +14,23 @@ import javafx.event.ActionEvent;
 class dataReader
 {
     private Button button;
+    private Label label;
     private FileChooser fileChooser;
     private Stage stage;
     private List<point> points;
 
-    public dataReader(FileChooser fileChooser, Button button, Stage stage){
+    public dataReader(FileChooser fileChooser, Button button, Label label, Stage stage){
         this.fileChooser = fileChooser;
         this.button = button;
+        this.label = label;
         this.stage = stage;
+
+        bindListenerToButton();
     }
 
     public List<point> getPoints()
     {
-        return points != null ? points : null;
+        return points;
     }
 
     private void bindListenerToButton()
@@ -36,6 +41,7 @@ class dataReader
                 public void handle(final ActionEvent e) {
                     File file = fileChooser.showOpenDialog(stage);
                     if (file != null) {
+                        label.setText(file.getName());
                         openFile(file);
                     }
                 }

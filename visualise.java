@@ -212,21 +212,23 @@ public class visualise extends Application
     private VBox buildLeftVbox(Stage stage)
     {
         VBox vbox = new VBox();
-        vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
-
+        vbox.setPrefWidth(200);
+        vbox.setPadding(new Insets(10));
+        
         Text title = new Text("Settings");
         Text cameraDistanceLabel = new Text("Camera Distance");
         Text fielOfViewLabel = new Text("Field of View");
+        Label fileNameLabel = new Label("No File Chosen");
 
         Slider cameraDistanceSlider = buildCameraDistanceSlider();
         Slider fieldOfViewSlider = buildFieldOfViewSlider();
         CheckBox axesCheckBox = buildShowAxesCheckBox();
-        Button openButton = new Button("Open a File...");
+        Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
         FileChooser fileChooser = new FileChooser();
 
-        reader = new dataReader(fileChooser, openButton, stage);
+        reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
         buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
@@ -237,6 +239,7 @@ public class visualise extends Application
         vbox.getChildren().add(fieldOfViewSlider);
         vbox.getChildren().add(axesCheckBox);
         vbox.getChildren().add(openButton);
+        vbox.getChildren().add(fileNameLabel);
         vbox.getChildren().add(buildButton);
 
         return vbox;
