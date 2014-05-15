@@ -399,15 +399,13 @@ public class visualise extends Application
 
     private void reset()
     {
-        root = new Group();
-        axisGroup = new Xform();
-        pointGroup = new Xform();
-        space = new Xform();
-        camera = new PerspectiveCamera(true);
-        cameraXform = new Xform();
+        root.getChildren().clear();
+        axisGroup.getChildren().clear();
+        pointGroup.getChildren().clear();
+        space.getChildren().clear();
+        cameraXform.getChildren().clear();
 
         root.getChildren().add(space);
-        root.setDepthTest(DepthTest.ENABLE);
 
         cameraDistanceSlider.setValue(1);
         fieldOfViewSlider.setValue(1);
@@ -417,25 +415,8 @@ public class visualise extends Application
     public void start(Stage primaryStage)
     {
         BorderPane borderPane = new BorderPane();
-        root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
-
-        /* String filename = "data.PCD"; */
-        /*  */
-        /* reader = new dataReader(filename); */
-        /* pointsList = reader.getPoints(); */
-        /*  */
-        /* ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE); */
-        /*  */
-        /* scaleFactor = sc.getScaleFactor(); */
-        /* sphereRadius = sc.getRadius(); */
-        /* cameraDistance = sc.getCameraDistance(); */
-        /* cameraFieldOfView = sc.getFieldOfView(); */
-        /*  */
-        /* buildCamera(); */
-        /* buildAxes(); */
-        /* buildPoints(); */
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox(stage));
