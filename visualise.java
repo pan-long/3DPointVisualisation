@@ -66,6 +66,8 @@ public class visualise extends Application
 
     private Stage stage = null;
     private dataReader reader = null;
+    private Slider cameraDistanceSlider = null;
+    private Slider fieldOfViewSlider = null;
 
     private void buildCamera()
     {
@@ -228,8 +230,8 @@ public class visualise extends Application
         Text fielOfViewLabel = new Text("Field of View");
         Label fileNameLabel = new Label("No File Chosen");
 
-        Slider cameraDistanceSlider = buildCameraDistanceSlider();
-        Slider fieldOfViewSlider = buildFieldOfViewSlider();
+        cameraDistanceSlider = buildCameraDistanceSlider();
+        fieldOfViewSlider = buildFieldOfViewSlider();
         CheckBox axesCheckBox = buildShowAxesCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
@@ -406,6 +408,9 @@ public class visualise extends Application
 
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
+
+        cameraDistanceSlider.setValue(1);
+        fieldOfViewSlider.setValue(1);
     }
 
     @Override
