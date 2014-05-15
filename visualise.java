@@ -171,22 +171,11 @@ public class visualise extends Application
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
 
-            VBox box = new VBox();
-            Label x = new Label();
-            x.setText("x: " + p.getX());
-            Label y = new Label();
-            y.setText("y: " + p.getY());
-            Label z = new Label();
-            z.setText("z: " + p.getZ());
-
-            box.getChildren().addAll(x, y, z);
-            box.setStyle("-fx-background-color: white;");
-
             Popup pop = new Popup();
 
             pop.setAutoFix(false);
             pop.setHideOnEscape(true);
-            pop.getContent().addAll(box);
+            pop.getContent().addAll(p.getBox());
 
             pointXform.setOnMouseMoved(new EventHandler<MouseEvent>()
             {

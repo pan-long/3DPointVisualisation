@@ -1,6 +1,10 @@
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+
 public class point implements Comparable<point>
 {
     private double x, y, z;
+    private VBox popupBox = null;
 
     public point(double x, double y, double z)
     {
@@ -22,6 +26,32 @@ public class point implements Comparable<point>
     public double getZ()
     {
         return this.z;
+    }
+
+    public VBox getBox()
+    {
+        return getXYZBox();
+    }
+
+    public VBox getXYZBox()
+    {
+        if (popupBox != null)
+            return popupBox;
+        else
+        {
+            popupBox = new VBox();
+            Label x = new Label();
+            x.setText("x: " + x);
+            Label y = new Label();
+            y.setText("y: " + y);
+            Label z = new Label();
+            z.setText("z: " + z);
+
+            popupBox.getChildren().addAll(x, y, z);
+            popupBox.setStyle("-fx-background-color: white;");
+
+            return popupBox;
+        }
     }
 
     @Override
