@@ -28,7 +28,8 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.stage.StageStyle;
+import javafx.geometry.Pos;
+import javafx.stage.Modality;
 
 public class visualise extends Application
 {
@@ -314,6 +315,35 @@ public class visualise extends Application
         return subScene;
     }
 
+    private VBox buildAlertBox(Stage dialog)
+    {
+        VBox vbox= new VBox();
+        vbox.setSpacing(20);
+        vbox.setPrefWidth(200);
+        vbox.setPadding(new Insets(40));
+        vbox.setAlignment(Pos.CENTER);
+
+        Text alertLabel = new Text(40, 40, "Failed to load file. Please try again!");
+        Button cancelAlert = new Button("OK");
+
+        alertLabel.setFill(Color.web("red"));
+
+        cancelAlert.setOnAction(
+            new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(final ActionEvent e)
+                {
+                    dialog.close();
+                }
+            });   
+
+        vbox.getChildren().add(alertLabel);
+        vbox.getChildren().add(cancelAlert);
+
+        return vbox; 
+    }
+
     private void buildVisualization(Button button)
     {
         button.setOnAction(
@@ -325,8 +355,11 @@ public class visualise extends Application
                 if (reader.getPoints() == null)
                 {
                     Stage dialog = new Stage();
-                    //dialog.initStyle(StageStyle.TRANSPARENT);
-                    Scene scene = new Scene(new Group(new Text(100, 50, "Hello World!")));
+                    Scene scene = new Scene(buildAlertBox(dialog), 300, 100);
+                    dialog.initModality(Modality.WINDOW_MODAL);
+                    dialog.initOwner(stage);
+                    dialog.setFullScreen(false);
+                    dialog.setResizable(false);
                     dialog.setScene(scene);
                     dialog.show();
                 }
