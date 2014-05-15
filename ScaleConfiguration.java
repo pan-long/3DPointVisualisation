@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.List;
 
 class ScaleConfiguration {
@@ -5,19 +6,20 @@ class ScaleConfiguration {
     private final double fieldOfView = 45;
 
     private List<point> pointsList = null;
-    private double maxCoor;
-    private double scaleFactor;
-    private double radius;
+    private double maxAbsCoor = 0;
+    private double scaleFactor = 0;
+    private double radius = 0;
 
-    public ScaleConfiguration(List<point> pointsList, double maxCoor)
+    public ScaleConfiguration(List<point> pointsList, double maxAbsCoor)
     {
         this.pointsList = pointsList;
-        this.maxCoor = maxCoor;
+        Collections.sort(this.pointsList);
+        this.maxAbsCoor = maxAbsCoor;
         this.scaleFactor = calculateScaleFactor();
-        this.radius = calculateMinDis(0, pointsList.size() - 1) / 2;
+        this.radius = calculateMinDis(0, pointsList.size() - 1) / 2 * scaleFactor;
     }
 
-    public double scaleFactor()
+    public double getScaleFactor()
     {
         return this.scaleFactor;
     }
@@ -32,7 +34,7 @@ class ScaleConfiguration {
             max = Math.max(max, Math.abs(pointsList.get(i).getZ()));
         }
 
-        return maxCoor / max;
+        return maxAbsCoor / max;
     }
 
     public double getRadius()

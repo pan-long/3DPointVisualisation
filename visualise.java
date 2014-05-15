@@ -35,25 +35,26 @@ public class visualise extends Application
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
 
-    private static final double CAMERA_INITIAL_DISTANCE = -450;
     private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
-    private static final double CAMERA_NEAR_CLIP = 0.1;
-    private static final double CAMERA_FAR_CLIP = 10000.0;
-    private static final double AXIS_LENGTH = 2.0;
+
+    private static final double MAX_ABS_COORDINATE = 10;
     private static final double HYDROGEN_ANGLE = 104.5;
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
-    private static final double SPHERE_RADIUS = 0.01;
 
+    private double cameraDistance;
+    private double cameraFieldOfView;
+    private double sphereRadius;
+    private double scaleFactor;
     private double mousePosX;
     private double mousePosY;
     private double mouseOldX;
     private double mouseOldY;
     private double mouseDeltaX;
     private double mouseDeltaY;
-    private double x;
+    private double xAngle;
 
     private List<point> pointsList = null;
 
@@ -69,13 +70,13 @@ public class visualise extends Application
         cameraXform.getChildren().add(camera);
         cameraXform.setRotateZ(180.0);
 
-        camera.setNearClip(CAMERA_NEAR_CLIP);
-        camera.setFarClip(CAMERA_FAR_CLIP);
-        camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
+        camera.setNearClip(cameraDistance * 0.01);
+        camera.setFarClip(cameraDistance * 100);
+        camera.setTranslateZ(cameraDistance);
         cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
         cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
 
-        camera.setFieldOfView(0.2);
+        camera.setFieldOfView(cameraFieldOfView);
     }
 
     private void buildAxes()
@@ -92,9 +93,9 @@ public class visualise extends Application
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
 
-        final Box xAxis = new Box(AXIS_LENGTH, 0.01, 0.01);
-        final Box yAxis = new Box(0.01, AXIS_LENGTH, 0.01);
-        final Box zAxis = new Box(0.01, 0.01, AXIS_LENGTH);
+        final Box xAxis = new Box(3 * MAX_ABS_COORDINATE, sphereRadius, sphereRadius);
+        final Box yAxis = new Box(sphereRadius, 3 * MAX_ABS_COORDINATE, sphereRadius);
+        final Box zAxis = new Box(sphereRadius, sphereRadius, MAX_ABS_COORDINATE);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
@@ -116,7 +117,7 @@ public class visualise extends Application
                 mousePosY = me.getSceneY();
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
-                x = cameraXform.rx.getAngle();
+                xAngle = cameraXform.rx.getAngle();
             }
         });
 
@@ -139,7 +140,7 @@ public class visualise extends Application
                     /* System.out.println("x: " + cameraXform.rx.getAngle()); */
                     /* System.out.println("y: " + cameraXform.ry.getAngle()); */
 
-                    if (((x % 360 > 0 && x % 360 < 90) || (x % 360 < 0 && x % 360 + 360 < 90)) || (x % 360 > 270 || (x % 360 < 0 && x % 360 + 360 > 270)))
+                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90)) || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
@@ -150,45 +151,8 @@ public class visualise extends Application
         });
     }
 
-    private double getMinDis(int start, int end)
-    {
-        if (start >= end)
-            /* return Double.MAX_VALUE; */
-            return 0;
-        else
-        {
-            int middle = (start + end) / 2;
-            double d1 = getMinDis(start, middle);
-            double d2 = getMinDis(middle + 1, end);
-
-            double d3 = Double.MAX_VALUE;
-            for (int i = start; i <= middle; i ++)
-                for (int j = middle + 1; j <= end; j ++)
-                    if (pointsList.get(i).getX() - pointsList.get(j).getX() <= d3)
-                    {
-                        double dis = pointsList.get(i).disTo(pointsList.get(j));
-                        if (dis > 0.0)
-                            d3 = Math.min(d3, dis);
-                    }
-
-            /* double minD = Math.min(d1, d2); */
-            /* minD = Math.min(minD, d3); */
-
-            /* return minD; */
-
-            double minD = Double.MAX_VALUE;
-            if (d1 > 0)
-                minD = Math.min(minD, d1);
-            if (d2 > 0)
-                minD = Math.min(minD, d2);
-            if (d3 > 0)
-                minD = Math.min(minD, d3);
-
-            return minD;
-        }
-    }
-
-    private void buildPoints(double radius)
+    
+    private void buildPoints()
     {
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);
@@ -199,11 +163,11 @@ public class visualise extends Application
         for (point p : pointsList)
         {
             Xform pointXform = new Xform();
-            Sphere pointSphere = new Sphere(radius);
+            Sphere pointSphere = new Sphere(sphereRadius);
             pointSphere.setMaterial(redMaterial);
-            pointSphere.setTranslateX(p.getX());
-            pointSphere.setTranslateY(p.getY());
-            pointSphere.setTranslateZ(p.getZ());
+            pointSphere.setTranslateX(p.getX() * scaleFactor);
+            pointSphere.setTranslateY(p.getY() * scaleFactor);
+            pointSphere.setTranslateZ(p.getZ() * scaleFactor);
 
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
@@ -366,17 +330,16 @@ public class visualise extends Application
 
         pointsList = dr.getPoints();
 
-        Collections.sort(pointsList);
-        double radius = getMinDis(0, pointsList.size() - 1) / 2;
-        if (radius < 1E-9)
-            radius = SPHERE_RADIUS;
+        ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
-        // debug
-        radius = 0.01;
+        this.scaleFactor = sc.getScaleFactor();
+        this.sphereRadius = sc.getRadius();
+        this.cameraDistance = sc.getCameraDistance();
+        this.cameraFieldOfView = sc.getFieldOfView();
 
         buildCamera();
         buildAxes();
-        buildPoints(radius);
+        buildPoints();
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox());
