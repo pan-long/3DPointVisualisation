@@ -377,6 +377,7 @@ public class visualise extends Application
 
         ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
+<<<<<<< HEAD
         scaleFactor = sc.getScaleFactor();
         sphereRadius = sc.getRadius();
         cameraDistance = sc.getCameraDistance();
@@ -385,6 +386,16 @@ public class visualise extends Application
         System.out.println(sphereRadius);
         System.out.println(cameraDistance);
         System.out.println(cameraFieldOfView);
+=======
+        Collections.sort(pointsList);
+        double radius = getMinDis(0, pointsList.size() - 1) / 2;
+        if (radius < 1E-9)
+            radius = SPHERE_RADIUS;
+        radius = 0.01;
+
+        // debug
+        radius = 0.01;
+>>>>>>> parent of de5ce1c... remove extra radius = 0.01
 
         buildCamera();
         buildAxes();
