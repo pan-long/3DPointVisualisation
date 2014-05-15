@@ -25,6 +25,10 @@ import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
+import javafx.stage.FileChooser;
+import javafx.scene.control.Button;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 public class visualise extends Application
 {
@@ -58,6 +62,7 @@ public class visualise extends Application
     private List<point> pointsList = null;
 
     private Stage stage = null;
+    private dataReader reader = null;
 
     private void buildCamera()
     {
@@ -265,7 +270,12 @@ public class visualise extends Application
         Slider cameraDistanceSlider = buildCameraDistanceSlider();
         Slider fieldOfViewSlider = buildFieldOfViewSlider();
         CheckBox axesCheckBox = buildShowAxesCheckBox();
+        Button openButton = new Button("Open a File...");
+        Button buildButton = new Button("Build");
+        FileChooser fileChooser = new FileChooser();
 
+        reader = new dataReader(fileChooser, openButton);
+        buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
         vbox.getChildren().add(title);
@@ -274,6 +284,8 @@ public class visualise extends Application
         vbox.getChildren().add(fielOfViewLabel);
         vbox.getChildren().add(fieldOfViewSlider);
         vbox.getChildren().add(axesCheckBox);
+        vbox.getChildren().add(openButton);
+        vbox.getChildren().add(buildButton);
 
         return vbox;
     }
@@ -350,6 +362,33 @@ public class visualise extends Application
         return subScene;
     }
 
+    private void buildVisualization(Button button){
+        button.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent e) {
+                    if (reader.getPoints() == null){
+
+                    } else {
+                        reset();
+                        pointsList = reader.getPoints();
+                        Collections.sort(pointsList);
+                        double radius = getMinDis(0, pointsList.size() - 1) / 2;
+                        if (radius < 1E-9)
+                            radius = SPHERE_RADIUS;
+
+                        buildCamera();
+                        buildAxes();
+                        buildPoints(radius);
+                    }
+                }
+            });
+    }
+
+    private void reset(){
+
+    }
+
     @Override
     public void start(Stage primaryStage)
     {
@@ -360,23 +399,23 @@ public class visualise extends Application
 
         /* Scanner sr = new Scanner(System.in); */
         /* String filename = sr.next(); */
-        String filename = "data.PCD";
+        // String filename = "data.PCD";
 
-        dataReader dr = new dataReader(filename);
+        // dataReader dr = new dataReader(filename);
 
-        pointsList = dr.getPoints();
+        // pointsList = dr.getPoints();
 
-        Collections.sort(pointsList);
-        double radius = getMinDis(0, pointsList.size() - 1) / 2;
-        if (radius < 1E-9)
-            radius = SPHERE_RADIUS;
+        // Collections.sort(pointsList);
+        // double radius = getMinDis(0, pointsList.size() - 1) / 2;
+        // if (radius < 1E-9)
+        //     radius = SPHERE_RADIUS;
 
-        // debug
-        radius = 0.01;
+        // // debug
+        // radius = 0.01;
 
-        buildCamera();
-        buildAxes();
-        buildPoints(radius);
+        // buildCamera();
+        // buildAxes();
+        // buildPoints(radius);
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox());
