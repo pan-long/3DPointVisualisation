@@ -181,7 +181,7 @@ public class visualise extends Application
                 public void handle(MouseEvent me)
                 {
                     pop.setX(me.getSceneX() + pop.getWidth());
-                    pop.setY(me.getSceneY() - 2 * pop.getHeight() / 3);
+                    pop.setY(me.getSceneY() - pop.getHeight() + sphereRadius);
 
                     pop.show(stage);
                 }
