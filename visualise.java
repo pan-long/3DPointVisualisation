@@ -243,7 +243,7 @@ public class visualise extends Application
         cameraDistanceSlider = buildCameraDistanceSlider();
         fieldOfViewSlider = buildFieldOfViewSlider();
         sphereSlider = buildSphereSlider();
-        
+
         CheckBox axesCheckBox = buildShowAxesCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
@@ -277,7 +277,10 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                camera.setTranslateZ(new_val.doubleValue() * cameraDistance);
+                if (new_val.doubleValue() < 4.2)
+                    camera.setTranslateZ((1 / (5.2 - new_val.doubleValue())) * cameraDistance);
+                else
+                    camera.setTranslateZ((new_val.doubleValue() - 3.2) * cameraDistance);
             }
         });
 
@@ -293,7 +296,10 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                camera.setFieldOfView(new_val.doubleValue() * cameraFieldOfView);
+                if (new_val.doubleValue() < 4.2)
+                    camera.setFieldOfView((1 / (5.2 - new_val.doubleValue())) * cameraFieldOfView);
+                else
+                    camera.setFieldOfView((new_val.doubleValue() - 3.2) * cameraFieldOfView);
             }
         });
 
@@ -309,9 +315,14 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val)
             {
-                if (spheresList != null){
-                    for (Sphere sphere : spheresList) {
-                        sphere.setRadius(new_val.doubleValue() * sphereRadius);
+                if (spheresList != null)
+                {
+                    for (Sphere sphere : spheresList)
+                    {
+                        if (new_val.doubleValue() < 4.2)
+                            sphere.setRadius((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                        else
+                            sphere.setRadius((new_val.doubleValue() - 3.2) * sphereRadius);
                     }
                 }
             }
@@ -320,34 +331,41 @@ public class visualise extends Application
         return slider;
     }
 
-    private Slider buildSlider() 
+    private Slider buildSlider()
     {
         Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(8);
-        slider.setValue(4);
+        slider.setMin(0.2);
+        slider.setMax(8.2);
+        slider.setValue(4.2);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(5);
         slider.setBlockIncrement(0.2);
 
-        slider.setLabelFormatter(new StringConverter<Double>() {
+        slider.setLabelFormatter(new StringConverter<Double>()
+        {
             @Override
-            public String toString(Double n) {
-                for (int i=1; i<5 ; i++) {
-                    if (n < i) {
-                        return "1/" + String.valueOf(6-i);
+            public String toString(Double n)
+            {
+                for (int i = 1; i < 5 ; i++)
+                {
+                    if (n < i)
+                    {
+                        return "1/" + String.valueOf(6 - i);
                     }
                 }
-                
-                if (n < 5) {
+
+                if (n < 5)
+                {
                     return "1";
                 }
 
-                for (int i=6; i<10 ; i++) {
-                    if (n < i) {
-                        return String.valueOf(i-4);
+                for (int i = 6; i < 10 ; i++)
+                {
+                    if (n < i)
+                    {
+                        return String.valueOf(i - 4);
                     }
                 }
 
@@ -355,7 +373,8 @@ public class visualise extends Application
             }
 
             @Override
-            public Double fromString(String s) {
+            public Double fromString(String s)
+            {
                 return Double.valueOf(s);
             }
         });
@@ -468,8 +487,9 @@ public class visualise extends Application
 
         root.getChildren().add(space);
 
-        cameraDistanceSlider.setValue(1);
-        fieldOfViewSlider.setValue(1);
+        cameraDistanceSlider.setValue(4.2);
+        fieldOfViewSlider.setValue(4.2);
+        sphereSlider.setValue(4.2);
     }
 
     @Override
@@ -495,6 +515,3 @@ public class visualise extends Application
         launch(args);
     }
 }
-
-
-
