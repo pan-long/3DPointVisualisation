@@ -680,6 +680,7 @@ public class visualise extends Application
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox(stage));
+        //borderPane.setLeft(new LeftVBox());
         Scene scene = new Scene(borderPane, 1200, 768, true);
 
         handleMouse(scene, space);
