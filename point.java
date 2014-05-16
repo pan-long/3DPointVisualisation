@@ -1,6 +1,8 @@
 public class point implements Comparable<point>
 {
     private double x, y, z;
+    private int color = -1;
+    private int[] rgb = null;
     private String[] properties = null;
 
     public point(double x, double y, double z)
@@ -8,6 +10,14 @@ public class point implements Comparable<point>
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public point(double x, double y, double z, int color)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.color = color;
     }
 
     public double getX()
@@ -23,6 +33,22 @@ public class point implements Comparable<point>
     public double getZ()
     {
         return this.z;
+    }
+
+    public int getRGB()
+    {
+        return this.color;
+    }
+
+    public int[] parseRGB(){
+        if (rgb == null && color != -1) {
+            rgb = new int[3];
+            rgb[0] = (color >> 16) & 0x0000ff;
+            rgb[1] = (color >> 8)  & 0x0000ff;
+            rgb[2] = (color) & 0x0000ff;
+        }
+
+        return rgb;
     }
 
     public String[] getProperties()

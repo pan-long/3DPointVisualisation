@@ -75,7 +75,9 @@ class dataReader
                 double x = Double.parseDouble(coordinates[0]);
                 double y = Double.parseDouble(coordinates[1]);
                 double z = Double.parseDouble(coordinates[2]);
-                points.add(new point(x, y, z));
+                int color = (int)Double.parseDouble(coordinates[3]);
+
+                points.add(new point(x, y, z, color));
             }
             reader.close();
         }

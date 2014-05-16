@@ -171,22 +171,28 @@ public class visualise extends Application
 
     private void buildPoints()
     {
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
-
         Xform pointsXform = new Xform();
         if (spheresList == null)
             spheresList = new ArrayList<Sphere> ();
         else
             spheresList.clear();
 
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.DARKRED);
+        material.setSpecularColor(Color.RED);
         for (point p : pointsList)
         {
+            int[] rgb = p.parseRGB();
+            if (rgb != null) {
+                material = new PhongMaterial();
+                material.setDiffuseColor(Color.rgb(rgb[0], rgb[1], rgb[2]));
+                material.setSpecularColor(Color.rgb(rgb[0], rgb[1], rgb[2]));   
+            }
+
             Xform pointXform = new Xform();
             Sphere pointSphere = new Sphere(sphereRadius);
             spheresList.add(pointSphere);
-            pointSphere.setMaterial(redMaterial);
+            pointSphere.setMaterial(material);
             pointSphere.setTranslateX(p.getX() * scaleFactor);
             pointSphere.setTranslateY(p.getY() * scaleFactor);
             pointSphere.setTranslateZ(p.getZ() * scaleFactor);
