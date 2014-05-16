@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
@@ -14,12 +15,12 @@ import javafx.event.ActionEvent;
 class dataReader
 {
     private Button button;
-    private Label label;
+    private Text label;
     private FileChooser fileChooser;
     private Stage stage;
     private List<point> points;
 
-    public dataReader(FileChooser fileChooser, Button button, Label label, Stage stage){
+    public dataReader(FileChooser fileChooser, Button button, Text label, Stage stage){
         this.fileChooser = fileChooser;
         this.button = button;
         this.label = label;

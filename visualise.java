@@ -32,6 +32,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.util.StringConverter;
+import javafx.scene.control.TextField;
 
 public class visualise extends Application
 {
@@ -246,45 +247,51 @@ public class visualise extends Application
     private VBox buildLeftVbox(Stage stage)
     {
         VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        hbox.setSpacing(8);
-        hbox.setPrefWidth(250);
+        HBox fileHbox = new HBox();
+        HBox originHbox = new HBox();
+        originHbox.setSpacing(5);
+        fileHbox.setSpacing(8);
         vbox.setSpacing(8);
-        vbox.setPrefWidth(250);
+        vbox.setPrefWidth(300);
         vbox.setPadding(new Insets(10));
 
         Text title = new Text("Settings");
         Text cameraDistanceLabel = new Text("Camera Distance");
-        Text fielOfViewLabel = new Text("Field of View");
+        Text fieldOfViewLabel = new Text("Field of View");
         Text sphereLabel = new Text("Sphere Radius");
-        Label fileNameLabel = new Label("No File Chosen");
+        Text fileNameLabel = new Text("No File Chosen");
+        Text originLabel = new Text("Override Origin");
+        Text r = new Text("r:");
+        Text g = new Text("g:");
+        Text b = new Text("b:");
 
         cameraDistanceSlider = buildCameraDistanceSlider();
         fieldOfViewSlider = buildFieldOfViewSlider();
         sphereSlider = buildSphereSlider();
 
         CheckBox axesCheckBox = buildShowAxesCheckBox();
+        CheckBox setOriginCheckBox = new CheckBox("Set Origin to Center Of Math");
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
+        Button updateButton = new Button("Update");
         FileChooser fileChooser = new FileChooser();
+        TextField rTextField = new TextField();
+        TextField gTextField = new TextField();
+        TextField bTextField = new TextField();
+
+        rTextField.setPrefColumnCount(3);
+        gTextField.setPrefColumnCount(3);
+        bTextField.setPrefColumnCount(3);
 
         reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
         buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         openButton.setMinWidth(105);
 
-        hbox.getChildren().add(openButton);
-        hbox.getChildren().add(fileNameLabel);
-        vbox.getChildren().add(title);
-        vbox.getChildren().add(cameraDistanceLabel);
-        vbox.getChildren().add(cameraDistanceSlider);
-        vbox.getChildren().add(fielOfViewLabel);
-        vbox.getChildren().add(fieldOfViewSlider);
-        vbox.getChildren().add(sphereLabel);
-        vbox.getChildren().add(sphereSlider);
-        vbox.getChildren().add(axesCheckBox);
-        vbox.getChildren().add(hbox);
-        vbox.getChildren().add(buildButton);
+        originHbox.getChildren().addAll(r, rTextField, g, gTextField, b, bTextField, updateButton);
+        fileHbox.getChildren().addAll(openButton, fileNameLabel);
+        vbox.getChildren().addAll(title, cameraDistanceLabel, cameraDistanceSlider, fieldOfViewLabel, fieldOfViewSlider, 
+            sphereLabel, sphereSlider, originLabel, originHbox, setOriginCheckBox, axesCheckBox, fileHbox, buildButton);
 
         return vbox;
     }
