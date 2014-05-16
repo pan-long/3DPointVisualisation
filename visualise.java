@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
@@ -245,6 +246,9 @@ public class visualise extends Application
     private VBox buildLeftVbox(Stage stage)
     {
         VBox vbox = new VBox();
+        HBox hbox = new HBox();
+        hbox.setSpacing(8);
+        hbox.setPrefWidth(250);
         vbox.setSpacing(8);
         vbox.setPrefWidth(250);
         vbox.setPadding(new Insets(10));
@@ -267,7 +271,10 @@ public class visualise extends Application
         reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
         buildVisualization(buildButton);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        openButton.setMinWidth(105);
 
+        hbox.getChildren().add(openButton);
+        hbox.getChildren().add(fileNameLabel);
         vbox.getChildren().add(title);
         vbox.getChildren().add(cameraDistanceLabel);
         vbox.getChildren().add(cameraDistanceSlider);
@@ -276,8 +283,7 @@ public class visualise extends Application
         vbox.getChildren().add(sphereLabel);
         vbox.getChildren().add(sphereSlider);
         vbox.getChildren().add(axesCheckBox);
-        vbox.getChildren().add(openButton);
-        vbox.getChildren().add(fileNameLabel);
+        vbox.getChildren().add(hbox);
         vbox.getChildren().add(buildButton);
 
         return vbox;
