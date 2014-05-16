@@ -64,6 +64,7 @@ public class visualise extends Application
     private double mouseDeltaX;
     private double mouseDeltaY;
     private double xAngle;
+    private double yAngle;
 
     private List<point> pointsList = null;
     private List<Sphere> spheresList = null;
@@ -129,6 +130,7 @@ public class visualise extends Application
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
                 xAngle = cameraXform.rx.getAngle();
+                yAngle = cameraXform.ry.getAngle();
             }
         });
 
