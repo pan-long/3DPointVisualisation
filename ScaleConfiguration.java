@@ -47,6 +47,13 @@ class ScaleConfiguration {
         return centerOfMass;
     }
 
+    public void setCenterOfMass(double x, double y, double z)
+    {
+        movedCenterOfMass[0] = x;
+        movedCenterOfMass[1] = y;
+        movedCenterOfMass[2] = z;
+    }
+
     public double[] calculateCenterOfMass()
     {
         double sumX, sumY, sumZ;
