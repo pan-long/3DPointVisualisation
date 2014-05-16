@@ -40,6 +40,7 @@ public class visualise extends Application
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
+    final Xform cameraXform2 = new Xform();
 
     private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
@@ -63,6 +64,7 @@ public class visualise extends Application
     private double mouseDeltaX;
     private double mouseDeltaY;
     private double xAngle;
+    private double yAngle;
 
     private List<point> pointsList = null;
     private List<Sphere> spheresList = null;
@@ -76,8 +78,9 @@ public class visualise extends Application
     private void buildCamera()
     {
         root.getChildren().add(cameraXform);
-        cameraXform.getChildren().add(camera);
-        cameraXform.setRotateZ(180.0);
+        cameraXform.getChildren().add(cameraXform2);
+        cameraXform2.getChildren().add(camera);
+        cameraXform2.setRotateZ(180.0);
 
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
@@ -127,6 +130,7 @@ public class visualise extends Application
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
                 xAngle = cameraXform.rx.getAngle();
+                yAngle = cameraXform.ry.getAngle();
             }
         });
 
@@ -144,7 +148,13 @@ public class visualise extends Application
 
                 double modifier = 1.0;
 
-                if (me.isPrimaryButtonDown())
+                if (me.isControlDown() && me.isPrimaryButtonDown())
+                {
+                    cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX * MOUSE_SPEED * modifier * TRACK_SPEED);
+                    cameraXform2.t.setY(cameraXform2.t.getY() + mouseDeltaY * MOUSE_SPEED * modifier * TRACK_SPEED);
+                }
+
+                else if (me.isPrimaryButtonDown())
                 {
                     if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90))
                             || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
@@ -490,6 +500,7 @@ public class visualise extends Application
         pointGroup.getChildren().clear();
         space.getChildren().clear();
         cameraXform.getChildren().clear();
+        cameraXform2.getChildren().clear();
 
         root.getChildren().add(space);
 
@@ -521,3 +532,4 @@ public class visualise extends Application
         launch(args);
     }
 }
+
