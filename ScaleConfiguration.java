@@ -20,8 +20,9 @@ class ScaleConfiguration {
         this.maxAbsCoor = maxAbsCoor;
         this.scaleFactor = calculateScaleFactor();
         this.radius = (calculateMinDis(0, pointsList.size() - 1) / 2) * scaleFactor;
+
         this.centerOfMass = calculateCenterOfMass();
-        movedCenterOfMass = centerOfMass;
+        this.movedCenterOfMass = centerOfMass;
     }
 
     public double getScaleFactor()

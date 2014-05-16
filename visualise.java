@@ -149,6 +149,8 @@ public class visualise extends Application
         zAxis.setTranslateX(newX);
         zAxis.setTranslateY(newY);
         zAxis.setTranslateZ(newZ);
+
+        cameraXform.setPivot(newX, newY, newZ);
     }
 
     private void handleMouse(Scene scene, final Node root)
@@ -254,9 +256,9 @@ public class visualise extends Application
                     double[] centerOfMass = sc.getOriginalCenter();
                     double[] newCenterOfMass = sc.getCenterOfMass();
 
-                    Label labelX = new Label("x: " + (properties[0] + newCenterOfMass[0] - centerOfMass[0]));
-                    Label labelY = new Label("y: " + (properties[1] + newCenterOfMass[1] - centerOfMass[1]));
-                    Label labelZ = new Label("z: " + (properties[2] + newCenterOfMass[2] - centerOfMass[2]));
+                    Label labelX = new Label("x: " + (properties[0] + (newCenterOfMass[0] - centerOfMass[0]) / scaleFactor));
+                    Label labelY = new Label("y: " + (properties[1] + (newCenterOfMass[1] - centerOfMass[1]) / scaleFactor));
+                    Label labelZ = new Label("z: " + (properties[2] + (newCenterOfMass[2] - centerOfMass[2]) / scaleFactor));
 
                     box.getChildren().add(labelX);
                     box.getChildren().add(labelY);
@@ -491,10 +493,13 @@ public class visualise extends Application
                         moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
                         moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
                     } else {
-                        double[] oldOrigin = sc.getOriginalCenter();
-                        sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                        moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                        moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                        /* double[] oldOrigin = sc.getOriginalCenter(); */
+                        /* sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
+                        /* moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
+                        /* moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
+                    sc.moveCenterTo(0, 0, 0);
+                    moveAxes(0, 0, 0);
+                    moveCamera(0, 0, 0);
                     }   
                 }
             }
@@ -613,6 +618,7 @@ public class visualise extends Application
 
         /* root.getChildren().add(space); */
         resetCamera();
+        moveAxes(0, 0, 0);
 
         cameraDistanceSlider.setValue(4.2);
         fieldOfViewSlider.setValue(4.2);
