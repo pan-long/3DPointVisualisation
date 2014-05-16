@@ -253,9 +253,9 @@ public class visualise extends Application
                     double[] centerOfMass = sc.getOriginalCenter();
                     double[] newCenterOfMass = sc.getCenterOfMass();
 
-                    Label labelX = new Label("x: " + (properties[0] + newCenterOfMass[0] - centerOfMass[0]));
-                    Label labelY = new Label("y: " + (properties[1] + newCenterOfMass[1] - centerOfMass[1]));
-                    Label labelZ = new Label("z: " + (properties[2] + newCenterOfMass[2] - centerOfMass[2]));
+                    Label labelX = new Label("x: " + (properties[0] + (newCenterOfMass[0] - centerOfMass[0]) / scaleFactor));
+                    Label labelY = new Label("y: " + (properties[1] + (newCenterOfMass[1] - centerOfMass[1]) / scaleFactor));
+                    Label labelZ = new Label("z: " + (properties[2] + (newCenterOfMass[2] - centerOfMass[2]) / scaleFactor));
 
                     box.getChildren().add(labelX);
                     box.getChildren().add(labelY);
