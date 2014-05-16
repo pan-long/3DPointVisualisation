@@ -508,6 +508,16 @@ public class visualise extends Application
         return cb;
     }
 
+    private void bindListenersToUI(){
+        // bindListenerToCameraDistanceSlider();
+        // bindListenerToFieldOfViewSlider();
+        // bindListenerToSphereSlider();
+        // bindListenersToUpdateOriginButton();
+        // bindListenersToSetOriginButton();
+        // bindListenersToFileChooser();
+        // bindListenersToBuildButton();
+    }
+
     private CheckBox buildShowAxesCheckBox()
     {
         CheckBox cb = new CheckBox("Show Axes");
