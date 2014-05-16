@@ -220,7 +220,7 @@ public class visualise extends Application
                 @Override
                 public void handle(MouseEvent me)
                 {
-                    pop.setX(me.getSceneX() + pop.getWidth());
+                    pop.setX(me.getSceneX() + pop.getWidth() + pop.getWidth() / 10.0);
                     pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
 
                     pop.show(stage);
