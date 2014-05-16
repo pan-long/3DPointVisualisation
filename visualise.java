@@ -69,6 +69,8 @@ public class visualise extends Application
     private double yAngle;
     private double[] originCenter, currentCenter;
 
+    private boolean newPoints;
+
     private List<point> pointsList = null;
     private List<Sphere> spheresList = null;
 
@@ -79,6 +81,8 @@ public class visualise extends Application
     private Slider cameraDistanceSlider = null;
     private Slider fieldOfViewSlider = null;
     private Slider sphereSlider = null;
+    private CheckBox axesCheckBox = null;
+    private CheckBox setOriginCheckBox = null;
 
     private void buildCamera()
     {
@@ -209,6 +213,9 @@ public class visualise extends Application
 
     private void buildPoints()
     {
+        if (newPoints)
+            setOriginCheckBox.setSelected(false);
+
         Xform pointsXform = new Xform();
         VBox box = new VBox();
         box.setStyle("-fx-background-color: white;");
@@ -312,8 +319,8 @@ public class visualise extends Application
         fieldOfViewSlider = buildFieldOfViewSlider();
         sphereSlider = buildSphereSlider();
 
-        CheckBox axesCheckBox = buildShowAxesCheckBox();
-        CheckBox setOriginCheckBox = buildSetOriginCheckBox();
+        axesCheckBox = buildShowAxesCheckBox();
+        setOriginCheckBox = buildSetOriginCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
         Button updateButton = new Button("Update");
@@ -637,6 +644,8 @@ public class visualise extends Application
                     reset();
                     pointsList = reader.getPoints();
 
+                    newPoints = true;
+
                     sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
                     currentCenter = sc.getCenterOfMass();
@@ -669,6 +678,8 @@ public class visualise extends Application
         cameraDistanceSlider.setValue(4.2);
         fieldOfViewSlider.setValue(4.2);
         sphereSlider.setValue(4.2);
+
+        newPoints = false;
     }
 
     @Override
