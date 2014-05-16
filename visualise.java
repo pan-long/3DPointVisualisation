@@ -156,13 +156,12 @@ public class visualise extends Application
 
                 else if (me.isPrimaryButtonDown())
                 {
-                    if (((xAngle % 360 > 0 && xAngle % 360 < 90) || (xAngle % 360 < 0 && xAngle % 360 + 360 < 90))
-                            || (xAngle % 360 > 270 || (xAngle % 360 < 0 && xAngle % 360 + 360 > 270)))
+                    if ((xAngle % 360 > 90 && xAngle % 360 < 270) || (xAngle % 360 < 0 && xAngle % 360 + 360 > 90 && xAngle % 360 + 360 < 270))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
 
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() - mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
                 }
             }
         });
