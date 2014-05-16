@@ -46,7 +46,7 @@ class ScaleConfiguration {
         return centerOfMass;
     }
 
-    private double[] calculateCenterOfMass()
+    public double[] calculateCenterOfMass()
     {
         double sumX, sumY, sumZ;
         double[] center = new double[3];

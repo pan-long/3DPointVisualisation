@@ -464,8 +464,8 @@ public class visualise extends Application
                         double z = Double.parseDouble(zTextField.getText());
 
                         sc.moveCenterTo(x, y, z);
-                        sc.moveAxes(x, y, z);
-                        sc.moveCamera(x, y, z);
+                        moveAxes(x, y, z);
+                        moveCamera(x, y, z);
                     }  
                     catch(NumberFormatException nfe)  
                     {  
@@ -487,13 +487,13 @@ public class visualise extends Application
                 if (new_val) {
                     double[] centerOfMass = sc.calculateCenterOfMass();
                     sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                    sc.moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                    sc.moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                    moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                    moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
                 } else {
                     double[] oldOrigin = sc.getOriginalCenter();
                     sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                    sc.moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                    sc.moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                    moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                    moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
                 }
             }
         });
