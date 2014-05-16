@@ -72,6 +72,7 @@ public class visualise extends Application
     private List<Sphere> spheresList = null;
 
     private Stage stage = null;
+    private Box xAxis, yAxis, zAxis;
     private dataReader reader = null;
     private Slider cameraDistanceSlider = null;
     private Slider fieldOfViewSlider = null;
@@ -102,6 +103,13 @@ public class visualise extends Application
         camera.setFieldOfView(cameraFieldOfView);
     }
 
+    private void moveCamera(double newX, double newY, double newZ)
+    {
+        cameraXform2.t.setX(newX);
+        cameraXform2.t.setY(newY);
+        cameraXform2.t.setZ(newZ);
+    }
+
     private void buildAxes()
     {
         final PhongMaterial redMaterial = new PhongMaterial();
@@ -116,9 +124,9 @@ public class visualise extends Application
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
 
-        final Box xAxis = new Box(3 * MAX_ABS_COORDINATE, 0.05, 0.05);
-        final Box yAxis = new Box(0.05, 3 * MAX_ABS_COORDINATE, 0.05);
-        final Box zAxis = new Box(0.05, 0.05, 3 * MAX_ABS_COORDINATE);
+        xAxis = new Box(3 * MAX_ABS_COORDINATE, 0.05, 0.05);
+        yAxis = new Box(0.05, 3 * MAX_ABS_COORDINATE, 0.05);
+        zAxis = new Box(0.05, 0.05, 3 * MAX_ABS_COORDINATE);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
@@ -127,6 +135,19 @@ public class visualise extends Application
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
         axisGroup.setVisible(true);
         space.getChildren().addAll(axisGroup);
+    }
+
+    private void moveAxes(double newX, double newY, double newZ)
+    {
+        xAxis.setTranslateX(newX);
+        xAxis.setTranslateY(newY);
+        xAxis.setTranslateZ(newZ);
+        yAxis.setTranslateX(newX);
+        yAxis.setTranslateY(newY);
+        yAxis.setTranslateZ(newZ);
+        zAxis.setTranslateX(newX);
+        zAxis.setTranslateY(newY);
+        zAxis.setTranslateZ(newZ);
     }
 
     private void handleMouse(Scene scene, final Node root)
@@ -228,12 +249,17 @@ public class visualise extends Application
                 public void handle(MouseEvent me)
                 {
                     box.getChildren().clear();
-                    String[] properties = p.getProperties();
-                    for (String str : properties)
-                    {
-                        Label label = new Label(str);
-                        box.getChildren().add(label);
-                    }
+                    double[] properties = p.getProperties();
+                    double[] centerOfMass = sc.getOriginalCenter();
+                    double[] newCenterOfMass = sc.getCenterOfMass();
+
+                    Label labelX = new Label("x: " + (properties[0] + newCenterOfMass[0] - centerOfMass[0]));
+                    Label labelY = new Label("y: " + (properties[1] + newCenterOfMass[1] - centerOfMass[1]));
+                    Label labelZ = new Label("z: " + (properties[2] + newCenterOfMass[2] - centerOfMass[2]));
+
+                    box.getChildren().add(labelX);
+                    box.getChildren().add(labelY);
+                    box.getChildren().add(labelZ);
 
                     pop.setX(me.getSceneX());
                     pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
