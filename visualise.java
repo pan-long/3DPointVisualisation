@@ -283,7 +283,7 @@ public class visualise extends Application
         sphereSlider = buildSphereSlider();
 
         CheckBox axesCheckBox = buildShowAxesCheckBox();
-        CheckBox setOriginCheckBox = new CheckBox("Set Origin to Center Of Mass");
+        CheckBox setOriginCheckBox = buildSetOriginCheckBox();
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
         Button updateButton = new Button("Update");
@@ -423,10 +423,36 @@ public class visualise extends Application
         return slider;
     }
 
+    private void bindListenerToOverrideOrigin(Button button)
+    {
+        button.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent e) {
+                    
+                }
+            });
+    }
+
+    private CheckBox buildSetOriginCheckBox()
+    {
+        CheckBox cb = new CheckBox("Set Origin to Center Of Mass");
+
+        cb.selectedProperty().addListener(new ChangeListener<Boolean>()
+        {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                                Boolean old_val, Boolean new_val)
+            {
+                
+            }
+        });
+
+        return cb;
+    }
+
     private CheckBox buildShowAxesCheckBox()
     {
-        CheckBox cb = new CheckBox();
-        cb.setText("Show Axes");
+        CheckBox cb = new CheckBox("Show Axes");
         cb.setSelected(true);
 
         cb.selectedProperty().addListener(new ChangeListener<Boolean>()
