@@ -73,6 +73,7 @@ public class visualise extends Application
 
     private Stage stage = null;
     private dataReader reader = null;
+    private ScaleConfiguration sc = null;
     private Slider cameraDistanceSlider = null;
     private Slider fieldOfViewSlider = null;
     private Slider sphereSlider = null;
@@ -274,9 +275,9 @@ public class visualise extends Application
         Text sphereLabel = new Text("Sphere Radius");
         Text fileNameLabel = new Text("No File Chosen");
         Text originLabel = new Text("Override Origin");
-        Text r = new Text("r:");
-        Text g = new Text("g:");
-        Text b = new Text("b:");
+        Text x = new Text("x:");
+        Text y = new Text("y:");
+        Text z = new Text("z:");
 
         cameraDistanceSlider = buildCameraDistanceSlider();
         fieldOfViewSlider = buildFieldOfViewSlider();
@@ -288,20 +289,21 @@ public class visualise extends Application
         Button buildButton = new Button("Build");
         Button updateButton = new Button("Update");
         FileChooser fileChooser = new FileChooser();
-        TextField rTextField = new TextField();
-        TextField gTextField = new TextField();
-        TextField bTextField = new TextField();
+        TextField xTextField = new TextField();
+        TextField yTextField = new TextField();
+        TextField zTextField = new TextField();
 
-        rTextField.setPrefColumnCount(3);
-        gTextField.setPrefColumnCount(3);
-        bTextField.setPrefColumnCount(3);
+        xTextField.setPrefColumnCount(3);
+        yTextField.setPrefColumnCount(3);
+        zTextField.setPrefColumnCount(3);
 
         reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
         buildVisualization(buildButton);
+        bindListenerToOverrideOrigin(updateButton, xTextField, yTextField, zTextField);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         openButton.setMinWidth(105);
 
-        originHbox.getChildren().addAll(r, rTextField, g, gTextField, b, bTextField, updateButton);
+        originHbox.getChildren().addAll(x, xTextField, y, yTextField, z, zTextField, updateButton);
         fileHbox.getChildren().addAll(openButton, fileNameLabel);
         vbox.getChildren().addAll(title, cameraDistanceLabel, cameraDistanceSlider, fieldOfViewLabel, fieldOfViewSlider, 
             sphereLabel, sphereSlider, originLabel, originHbox, setOriginCheckBox, axesCheckBox, fileHbox, buildButton);
@@ -423,13 +425,26 @@ public class visualise extends Application
         return slider;
     }
 
-    private void bindListenerToOverrideOrigin(Button button)
+    private void bindListenerToOverrideOrigin(Button button, TextField xTextField, TextField yTextField, TextField zTextField)
     {
         button.setOnAction(
             new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(final ActionEvent e) {
-                    
+                    try  
+                    {  
+                        double x = Double.parseDouble(xTextField.getText());
+                        double y = Double.parseDouble(yTextField.getText());
+                        double z = Double.parseDouble(zTextField.getText());
+
+                        sc.moveCenterTo(x, y, z);
+                        sc.moveAxes(x, y, z);
+                        sc.moveCamera(x, y, z);
+                    }  
+                    catch(NumberFormatException nfe)  
+                    {  
+                        
+                    } 
                 }
             });
     }
@@ -443,7 +458,17 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Boolean> ov,
                                 Boolean old_val, Boolean new_val)
             {
-                
+                if (new_val) {
+                    double[] centerOfMass = sc.calculateCenterOfMass();
+                    sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                    sc.moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                    sc.moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                } else {
+                    double[] oldOrigin = sc.getOriginalCenter();
+                    sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                    sc.moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                    sc.moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                }
             }
         });
 
@@ -529,7 +554,7 @@ public class visualise extends Application
                     reset();
                     pointsList = reader.getPoints();
 
-                    ScaleConfiguration sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
+                    sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
                     scaleFactor = sc.getScaleFactor();
                     sphereRadius = sc.getRadius();
