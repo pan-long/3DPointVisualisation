@@ -116,6 +116,10 @@ class LeftVBox extends VBox{
     	this.sphereSlider.setValue(v);
     }
 
+    public void updateSetOriginCheckBox(boolean b){
+    	this.setOriginCheckBox.setSelected(b);
+    }
+
     public Slider getCameraDistanceSlider(){
     	return this.cameraDistanceSlider;
     }
