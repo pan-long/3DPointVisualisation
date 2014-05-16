@@ -73,6 +73,7 @@ public class visualise extends Application
     private List<Sphere> spheresList = null;
 
     private Stage stage = null;
+    private LeftVBox leftVBox = null;
     private Box xAxis, yAxis, zAxis;
     private dataReader reader = null;
     private ScaleConfiguration sc = null;
@@ -287,62 +288,9 @@ public class visualise extends Application
         /* space.getChildren().addAll(pointGroup); */
     }
 
-    private VBox buildLeftVbox(Stage stage)
+    private void bindListenerToCameraDistanceSlider()
     {
-        VBox vbox = new VBox();
-        HBox fileHbox = new HBox();
-        HBox originHbox = new HBox();
-        originHbox.setSpacing(5);
-        fileHbox.setSpacing(8);
-        vbox.setSpacing(8);
-        vbox.setPrefWidth(300);
-        vbox.setPadding(new Insets(10));
-
-        Text title = new Text("Settings");
-        Text cameraDistanceLabel = new Text("Camera Distance");
-        Text fieldOfViewLabel = new Text("Field of View");
-        Text sphereLabel = new Text("Sphere Radius");
-        Text fileNameLabel = new Text("No File Chosen");
-        Text originLabel = new Text("Override Origin");
-        Text x = new Text("x:");
-        Text y = new Text("y:");
-        Text z = new Text("z:");
-
-        cameraDistanceSlider = buildCameraDistanceSlider();
-        fieldOfViewSlider = buildFieldOfViewSlider();
-        sphereSlider = buildSphereSlider();
-
-        CheckBox axesCheckBox = buildShowAxesCheckBox();
-        CheckBox setOriginCheckBox = buildSetOriginCheckBox();
-        Button openButton = new Button("Choose File...");
-        Button buildButton = new Button("Build");
-        Button updateButton = new Button("Update");
-        FileChooser fileChooser = new FileChooser();
-        TextField xTextField = new TextField();
-        TextField yTextField = new TextField();
-        TextField zTextField = new TextField();
-
-        xTextField.setPrefColumnCount(3);
-        yTextField.setPrefColumnCount(3);
-        zTextField.setPrefColumnCount(3);
-
-        reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
-        buildVisualization(buildButton);
-        bindListenerToOverrideOrigin(updateButton, xTextField, yTextField, zTextField);
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        openButton.setMinWidth(105);
-
-        originHbox.getChildren().addAll(x, xTextField, y, yTextField, z, zTextField, updateButton);
-        fileHbox.getChildren().addAll(openButton, fileNameLabel);
-        vbox.getChildren().addAll(title, cameraDistanceLabel, cameraDistanceSlider, fieldOfViewLabel, fieldOfViewSlider,
-                                  sphereLabel, sphereSlider, originLabel, originHbox, setOriginCheckBox, axesCheckBox, fileHbox, buildButton);
-
-        return vbox;
-    }
-
-    private Slider buildCameraDistanceSlider()
-    {
-        Slider slider = buildSlider();
+        Slider slider = leftVBox.getCameraDistanceSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -355,13 +303,11 @@ public class visualise extends Application
                     camera.setTranslateZ((new_val.doubleValue() - 3.2) * cameraDistance);
             }
         });
-
-        return slider;
     }
 
-    private Slider buildFieldOfViewSlider()
+    private void bindListenerToFieldOfViewSlider()
     {
-        Slider slider = buildSlider();
+        Slider slider = leftVBox.getFieldOfViewSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -374,13 +320,11 @@ public class visualise extends Application
                     camera.setFieldOfView((new_val.doubleValue() - 3.2) * cameraFieldOfView);
             }
         });
-
-        return slider;
     }
 
-    private Slider buildSphereSlider()
+    private void bindListenerToSphereSlider()
     {
-        Slider slider = buildSlider();
+        Slider slider = leftVBox.getSphereSlider();
 
         slider.valueProperty().addListener(new ChangeListener<Number>()
         {
@@ -399,8 +343,6 @@ public class visualise extends Application
                 }
             }
         });
-
-        return slider;
     }
 
     private Slider buildSlider()
@@ -484,8 +426,10 @@ public class visualise extends Application
         buildPoints();
     }
 
-    private void bindListenerToOverrideOrigin(Button button, TextField xTextField, TextField yTextField, TextField zTextField)
+    private void bindListenersToUpdateOriginButton()
     {
+        Button button = leftVBox.getUpdateButton();
+
         button.setOnAction(
             new EventHandler<ActionEvent>()
         {
@@ -494,15 +438,10 @@ public class visualise extends Application
             {
                 if (spheresList != null)
                 {
-                    try
-                    {
-                        double x = Double.parseDouble(xTextField.getText());
-                        double y = Double.parseDouble(yTextField.getText());
-                        double z = Double.parseDouble(zTextField.getText());
-                        rebuildPoints(x, y, z);
-                    }
-                    catch (NumberFormatException nfe)
-                    {
+                    double[] newOrigin = leftVBox.getNewOrigin();
+                    if (newOrigin != null) {
+                        rebuildPoints(newOrigin[0], newOrigin[1], newOrigin[2]);   
+                    } else {
                         buildAlertWindow("Please enter a valid origin and try again.");
                     }
                 }
@@ -510,9 +449,9 @@ public class visualise extends Application
         });
     }
 
-    private CheckBox buildSetOriginCheckBox()
+    private CheckBox bindListenersToSetOriginCheckBox()
     {
-        CheckBox cb = new CheckBox("Set Origin to Center Of Mass");
+        CheckBox cb = leftVBox.getSetOriginCheckBox();
 
         cb.selectedProperty().addListener(new ChangeListener<Boolean>()
         {
@@ -523,21 +462,10 @@ public class visualise extends Application
                 {
                     if (new_val)
                     {
-                        /* double[] centerOfMass = sc.calculateCenterOfMass(); */
-                        /* sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
-                        /* moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
-                        /* moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
                         rebuildPoints(0, 0, 0);
                     }
                     else
                     {
-                        /* double[] oldOrigin = sc.getOriginalCenter(); */
-                        /* sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
-                        /* moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
-                        /* moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
-                        /* sc.moveCenterTo(0, 0, 0); */
-                        /* moveAxes(0, 0, 0); */
-                        /* moveCamer(0, 0, 0); */
                         if (Math.abs(originCenter[0]) > 1E-9 || Math.abs(originCenter[1]) > 1E-9 || Math.abs(originCenter[2]) > 1E-9)
                             rebuildPoints(originCenter[0], originCenter[1], originCenter[2]);
                     }
@@ -548,20 +476,27 @@ public class visualise extends Application
         return cb;
     }
 
-    private void bindListenersToUI(){
-        // bindListenerToCameraDistanceSlider();
-        // bindListenerToFieldOfViewSlider();
-        // bindListenerToSphereSlider();
-        // bindListenersToUpdateOriginButton();
-        // bindListenersToSetOriginButton();
-        // bindListenersToFileChooser();
-        // bindListenersToBuildButton();
+    private void bindListenersToFileChooser(){
+        Text fileNameLabel = leftVBox.getFileNameLabel();
+        Button openButton = leftVBox.getOpenButton();
+        FileChooser fileChooser = leftVBox.getFileChooser();
+        reader = new dataReader(fileChooser, openButton, fileNameLabel, stage);
     }
 
-    private CheckBox buildShowAxesCheckBox()
+    private void bindListenersToUI(){
+        bindListenerToCameraDistanceSlider();
+        bindListenerToFieldOfViewSlider();
+        bindListenerToSphereSlider();
+        bindListenersToUpdateOriginButton();
+        bindListenersToSetOriginCheckBox();
+        bindListenersToShowAxesCheckBox();
+        bindListenersToFileChooser();
+        bindListenersToBuildButton();
+    }
+
+    private void bindListenersToShowAxesCheckBox()
     {
-        CheckBox cb = new CheckBox("Show Axes");
-        cb.setSelected(true);
+        CheckBox cb = leftVBox.getAxesCheckBox();
 
         cb.selectedProperty().addListener(new ChangeListener<Boolean>()
         {
@@ -571,8 +506,6 @@ public class visualise extends Application
                 axisGroup.setVisible(new_val);
             }
         });
-
-        return cb;
     }
 
     private SubScene buildSubScene()
@@ -625,8 +558,10 @@ public class visualise extends Application
         return vbox;
     }
 
-    private void buildVisualization(Button button)
+    private void bindListenersToBuildButton()
     {
+        Button button = leftVBox.getBuildButton();
+
         button.setOnAction(
             new EventHandler<ActionEvent>()
         {
@@ -671,9 +606,12 @@ public class visualise extends Application
         resetCamera();
         moveAxes(0, 0, 0);
 
-        cameraDistanceSlider.setValue(4.2);
-        fieldOfViewSlider.setValue(4.2);
-        sphereSlider.setValue(4.2);
+        // cameraDistanceSlider.setValue(4.2);
+        leftVBox.setCameraDistanceSliderValue(4.2);
+        // fieldOfViewSlider.setValue(4.2);
+        leftVBox.setFieldOfViewSliderValue(4.2);
+        // sphereSlider.setValue(4.2);
+        leftVBox.setSphereSliderValue(4.2);
     }
 
     @Override
@@ -689,8 +627,10 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
 
         borderPane.setCenter(buildSubScene());
-        borderPane.setLeft(buildLeftVbox(stage));
-        //borderPane.setLeft(new LeftVBox());
+        //borderPane.setLeft(buildLeftVbox(stage));
+        leftVBox = new LeftVBox();
+        bindListenersToUI();
+        borderPane.setLeft(leftVBox);
         Scene scene = new Scene(borderPane, 1200, 768, true);
 
         handleMouse(scene, space);

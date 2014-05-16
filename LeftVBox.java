@@ -43,6 +43,7 @@ class LeftVBox extends VBox{
 		fileHbox.setSpacing(8);
 		setOriginHBox.setSpacing(5);
 		openButton.setMinWidth(105);
+		axesCheckBox.setSelected(true);
 
 		setSpacing(8);
 		setPrefWidth(300);
@@ -103,6 +104,18 @@ class LeftVBox extends VBox{
         return slider;
     }
 
+    public void setCameraDistanceSliderValue(double v){
+    	this.cameraDistanceSlider.setValue(v);
+    }
+
+    public void setFieldOfViewSliderValue(double v){
+    	this.fieldOfViewSlider.setValue(v);
+    }
+
+    public void setSphereSliderValue(double v){
+    	this.sphereSlider.setValue(v);
+    }
+
     public Slider getCameraDistanceSlider(){
     	return this.cameraDistanceSlider;
     }
@@ -123,7 +136,41 @@ class LeftVBox extends VBox{
     	return this.updateButton;
     }
 
+    public double[] getNewOrigin(){
+    	double[] newOrigin = new double[3];
+    	try
+    	{
+    		newOrigin[0] = Double.parseDouble(xTextField.getText());
+    		newOrigin[1] = Double.parseDouble(yTextField.getText());
+    		newOrigin[2] = Double.parseDouble(zTextField.getText());
+    	}
+    	catch (NumberFormatException nfe)
+    	{
+   			return null;
+    	}
 
+    	return newOrigin;
+    }
+
+    public Button getOpenButton(){
+    	return this.openButton;
+    }
+
+    public Text getFileNameLabel(){
+    	return this.fileNameLabel;
+    }
+
+    public FileChooser getFileChooser(){
+    	return this.fileChooser;
+    }
+
+    public CheckBox getSetOriginCheckBox(){
+    	return this.setOriginCheckBox;
+    }
+
+    public CheckBox getAxesCheckBox(){
+    	return this.axesCheckBox;
+    }
 }
 
 
