@@ -42,8 +42,8 @@ public class visualise extends Application
     final Xform cameraXform = new Xform();
     final Xform cameraXform2 = new Xform();
 
-    private static final double CAMERA_INITIAL_X_ANGLE = 165.0;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 210.0;
+    private static final double CAMERA_INITIAL_X_ANGLE = 190.0;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 150.0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000;
 
@@ -53,8 +53,8 @@ public class visualise extends Application
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
 
-    private double cameraDistance;
-    private double cameraFieldOfView;
+    private double cameraDistance = -30;
+    private double cameraFieldOfView = 45;
     private double sphereRadius;
     private double scaleFactor;
     private double mousePosX;
@@ -91,6 +91,15 @@ public class visualise extends Application
         camera.setFieldOfView(cameraFieldOfView);
     }
 
+    private void resetCamera()
+    {
+        camera.setTranslateZ(cameraDistance);
+        cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
+        cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+
+        camera.setFieldOfView(cameraFieldOfView);
+    }
+
     private void buildAxes()
     {
         final PhongMaterial redMaterial = new PhongMaterial();
@@ -105,9 +114,9 @@ public class visualise extends Application
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
 
-        final Box xAxis = new Box(3 * MAX_ABS_COORDINATE, sphereRadius, sphereRadius);
-        final Box yAxis = new Box(sphereRadius, 3 * MAX_ABS_COORDINATE, sphereRadius);
-        final Box zAxis = new Box(sphereRadius, sphereRadius, 3 * MAX_ABS_COORDINATE);
+        final Box xAxis = new Box(3 * MAX_ABS_COORDINATE, 0.05, 0.05);
+        final Box yAxis = new Box(0.05, 3 * MAX_ABS_COORDINATE, 0.05);
+        final Box zAxis = new Box(0.05, 0.05, 3 * MAX_ABS_COORDINATE);
 
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
@@ -156,6 +165,9 @@ public class visualise extends Application
 
                 else if (me.isPrimaryButtonDown())
                 {
+                    /* System.out.println("x: " + cameraXform.rx.getAngle()); */
+                    /* System.out.println("y: " + cameraXform.ry.getAngle()); */
+
                     if ((xAngle % 360 > 90 && xAngle % 360 < 270) || (xAngle % 360 < 0 && xAngle % 360 + 360 > 90 && xAngle % 360 + 360 < 270))
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
                     else
@@ -240,7 +252,7 @@ public class visualise extends Application
         }
 
         pointGroup.getChildren().add(pointsXform);
-        space.getChildren().addAll(pointGroup);
+        /* space.getChildren().addAll(pointGroup); */
     }
 
     private VBox buildLeftVbox(Stage stage)
@@ -485,8 +497,8 @@ public class visualise extends Application
                     cameraDistance = sc.getCameraDistance();
                     cameraFieldOfView = sc.getFieldOfView();
 
-                    buildCamera();
-                    buildAxes();
+                    /* buildCamera(); */
+                    /* buildAxes(); */
                     buildPoints();
                 }
             }
@@ -495,14 +507,15 @@ public class visualise extends Application
 
     private void reset()
     {
-        root.getChildren().clear();
-        axisGroup.getChildren().clear();
+        /* root.getChildren().clear(); */
+        /* axisGroup.getChildren().clear(); */
         pointGroup.getChildren().clear();
-        space.getChildren().clear();
-        cameraXform.getChildren().clear();
-        cameraXform2.getChildren().clear();
+        /* space.getChildren().clear(); */
+        /* cameraXform.getChildren().clear(); */
+        /* cameraXform2.getChildren().clear(); */
 
-        root.getChildren().add(space);
+        /* root.getChildren().add(space); */
+        resetCamera();
 
         cameraDistanceSlider.setValue(4.2);
         fieldOfViewSlider.setValue(4.2);
@@ -513,8 +526,13 @@ public class visualise extends Application
     public void start(Stage primaryStage)
     {
         BorderPane borderPane = new BorderPane();
+        root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
+
+        buildAxes();
+        buildCamera();
+        space.getChildren().addAll(pointGroup);
 
         borderPane.setCenter(buildSubScene());
         borderPane.setLeft(buildLeftVbox(stage));
@@ -532,8 +550,3 @@ public class visualise extends Application
         launch(args);
     }
 }
-
-
-
-
-
