@@ -67,6 +67,7 @@ public class visualise extends Application
     private double mouseDeltaY;
     private double xAngle;
     private double yAngle;
+    private double[] originCenter = new double[3];
 
     private List<point> pointsList = null;
     private List<Sphere> spheresList = null;
@@ -333,8 +334,8 @@ public class visualise extends Application
 
         originHbox.getChildren().addAll(x, xTextField, y, yTextField, z, zTextField, updateButton);
         fileHbox.getChildren().addAll(openButton, fileNameLabel);
-        vbox.getChildren().addAll(title, cameraDistanceLabel, cameraDistanceSlider, fieldOfViewLabel, fieldOfViewSlider, 
-            sphereLabel, sphereSlider, originLabel, originHbox, setOriginCheckBox, axesCheckBox, fileHbox, buildButton);
+        vbox.getChildren().addAll(title, cameraDistanceLabel, cameraDistanceSlider, fieldOfViewLabel, fieldOfViewSlider,
+                                  sphereLabel, sphereSlider, originLabel, originHbox, setOriginCheckBox, axesCheckBox, fileHbox, buildButton);
 
         return vbox;
     }
@@ -453,28 +454,60 @@ public class visualise extends Application
         return slider;
     }
 
+    private void rebuildPoints(double x, double y, double z)
+    {
+        reset();
+        int size = pointsList.size();
+        double[] center = sc.getCenterOfMass();
+        originCenter = center;
+
+        for (int i = 0; i < size; i ++)
+        {
+            point p = pointsList.get(i);
+            double newX = p.getX() + (x - center[0]) / scaleFactor;
+            double newY = p.getY() + (y - center[1]) / scaleFactor;
+            double newZ = p.getZ() + (z - center[2]) / scaleFactor;
+            int color = p.getRGB();
+            pointsList.set(i, new point(newX, newY, newZ, color));
+        }
+
+        sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
+        sc.setCenterOfMass(x, y, z);
+
+        scaleFactor = sc.getScaleFactor();
+        sphereRadius = sc.getRadius();
+        cameraDistance = sc.getCameraDistance();
+        cameraFieldOfView = sc.getFieldOfView();
+
+        /* buildCamera(); */
+        /* buildAxes(); */
+        buildPoints();
+    }
+
     private void bindListenerToOverrideOrigin(Button button, TextField xTextField, TextField yTextField, TextField zTextField)
     {
         button.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                    try  
-                    {  
+            new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle(final ActionEvent e)
+            {
+                if (spheresList != null)
+                {
+                    try
+                    {
                         double x = Double.parseDouble(xTextField.getText());
                         double y = Double.parseDouble(yTextField.getText());
                         double z = Double.parseDouble(zTextField.getText());
-
-                        sc.moveCenterTo(x, y, z);
-                        moveAxes(x, y, z);
-                        moveCamera(x, y, z);
-                    }  
-                    catch(NumberFormatException nfe)  
-                    {  
+                        rebuildPoints(x, y, z);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
                         buildAlertWindow("Please enter a valid origin and try again.");
-                    } 
+                    }
                 }
-            });
+            }
+        });
     }
 
     private CheckBox buildSetOriginCheckBox()
@@ -486,21 +519,28 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Boolean> ov,
                                 Boolean old_val, Boolean new_val)
             {
-                if (spheresList != null) {
-                    if (new_val) {
-                        double[] centerOfMass = sc.calculateCenterOfMass();
-                        sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                        moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                        moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                    } else {
+                if (spheresList != null)
+                {
+                    if (new_val)
+                    {
+                        /* double[] centerOfMass = sc.calculateCenterOfMass(); */
+                        /* sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
+                        /* moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
+                        /* moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]); */
+                        rebuildPoints(0, 0, 0);
+                    }
+                    else
+                    {
                         /* double[] oldOrigin = sc.getOriginalCenter(); */
                         /* sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
                         /* moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
                         /* moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]); */
-                    sc.moveCenterTo(0, 0, 0);
-                    moveAxes(0, 0, 0);
-                    moveCamera(0, 0, 0);
-                    }   
+                        /* sc.moveCenterTo(0, 0, 0); */
+                        /* moveAxes(0, 0, 0); */
+                        /* moveCamer(0, 0, 0); */
+                        if (Math.abs(originCenter[0]) > 1E-9 || Math.abs(originCenter[1]) > 1E-9 || Math.abs(originCenter[2]) > 1E-9)
+                            rebuildPoints(originCenter[0], originCenter[1], originCenter[2]);
+                    }
                 }
             }
         });
@@ -594,6 +634,7 @@ public class visualise extends Application
 
                     sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
+                    originCenter = sc.getCenterOfMass();
                     scaleFactor = sc.getScaleFactor();
                     sphereRadius = sc.getRadius();
                     cameraDistance = sc.getCameraDistance();
