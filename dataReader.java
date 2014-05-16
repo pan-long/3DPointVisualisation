@@ -57,8 +57,8 @@ class dataReader
     private void configureFileChooser(
         final FileChooser fileChooser) {                   
             fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PCL", "*.pcl"),
-                new FileChooser.ExtensionFilter("PCD", "*.pcd")
+                new FileChooser.ExtensionFilter("PCD", "*.pcd"),
+                new FileChooser.ExtensionFilter("PCL", "*.pcl")
             );
     }
 
