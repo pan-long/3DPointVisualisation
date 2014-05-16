@@ -171,6 +171,14 @@ public class visualise extends Application
     private void buildPoints()
     {
         Xform pointsXform = new Xform();
+        VBox box = new VBox();
+        box.setStyle("-fx-background-color: white;");
+
+        Popup pop = new Popup();
+        pop.setAutoFix(false);
+        pop.setHideOnEscape(true);
+        pop.getContent().addAll(box);
+
         if (spheresList == null)
             spheresList = new ArrayList<Sphere> ();
         else
@@ -182,10 +190,11 @@ public class visualise extends Application
         for (point p : pointsList)
         {
             int[] rgb = p.parseRGB();
-            if (rgb != null) {
+            if (rgb != null)
+            {
                 material = new PhongMaterial();
                 material.setDiffuseColor(Color.rgb(rgb[0], rgb[1], rgb[2]));
-                material.setSpecularColor(Color.rgb(rgb[0], rgb[1], rgb[2]));   
+                material.setSpecularColor(Color.rgb(rgb[0], rgb[1], rgb[2]));
             }
 
             Xform pointXform = new Xform();
@@ -199,28 +208,20 @@ public class visualise extends Application
             pointsXform.getChildren().add(pointXform);
             pointXform.getChildren().add(pointSphere);
 
-            VBox box = new VBox();
-            box.setStyle("-fx-background-color: white;");
-
-            String[] properties = p.getProperties();
-            for (String str : properties)
-            {
-                Label label = new Label(str);
-                box.getChildren().add(label);
-            }
-
-            Popup pop = new Popup();
-
-            pop.setAutoFix(false);
-            pop.setHideOnEscape(true);
-            pop.getContent().addAll(box);
-
             pointXform.setOnMouseMoved(new EventHandler<MouseEvent>()
             {
                 @Override
                 public void handle(MouseEvent me)
                 {
-                    pop.setX(me.getSceneX() + pop.getWidth() + pop.getWidth() / 10.0);
+                    box.getChildren().clear();
+                    String[] properties = p.getProperties();
+                    for (String str : properties)
+                    {
+                        Label label = new Label(str);
+                        box.getChildren().add(label);
+                    }
+
+                    pop.setX(me.getSceneX());
                     pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
 
                     pop.show(stage);
@@ -531,4 +532,8 @@ public class visualise extends Application
         launch(args);
     }
 }
+
+
+
+
 
