@@ -17,7 +17,7 @@ class ScaleConfiguration {
 
         this.maxAbsCoor = maxAbsCoor;
         this.scaleFactor = calculateScaleFactor();
-        this.radius = (calculateMinDis(0, this.pointsList.size() - 1) / 2) * this.scaleFactor;
+        this.radius = (calculateMinDis(0, pointsList.size() - 1) / 2) * scaleFactor;
     }
 
     public double getScaleFactor()
@@ -52,10 +52,12 @@ class ScaleConfiguration {
             int middle = (start + end) / 2;
             double d1 = calculateMinDis(start, middle);
             double d2 = calculateMinDis(middle + 1, end);
-
             double d3 = Double.MAX_VALUE;
-            for (int i = start; i <= middle; i ++)
-                for (int j = middle + 1; j <= end; j ++)
+
+            double end_op = (end - middle - 1 > 6) ? middle + 7 : end;
+
+            for (int i = (middle - start > 6) ? middle - 6 : start; i <= middle; i ++)
+                for (int j = middle + 1; j <= end_op; j ++)
                     if (pointsList.get(i).getX() - pointsList.get(j).getX() <= d3)
                     {
                         double dis = pointsList.get(i).disTo(pointsList.get(j));
