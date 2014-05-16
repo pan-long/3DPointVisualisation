@@ -10,6 +10,7 @@ class ScaleConfiguration {
     private double scaleFactor = 0;
     private double radius = 0;
     private double[] centerOfMass = new double[3];
+    private double[] movedCenterOfMass = new double[3];
 
     public ScaleConfiguration(List<point> pointsList, double maxAbsCoor)
     {
@@ -20,6 +21,7 @@ class ScaleConfiguration {
         this.scaleFactor = calculateScaleFactor();
         this.radius = (calculateMinDis(0, pointsList.size() - 1) / 2) * scaleFactor;
         this.centerOfMass = calculateCenterOfMass();
+        movedCenterOfMass = centerOfMass;
     }
 
     public double getScaleFactor()
@@ -29,7 +31,19 @@ class ScaleConfiguration {
 
     public double[] getCenterOfMass()
     {
-        return this.centerOfMass;
+        return this.movedCenterOfMass;
+    }
+
+    public void moveCenterTo(double newX, double newY, double newZ)
+    {
+        movedCenterOfMass[0] = newX;
+        movedCenterOfMass[1] = newY;
+        movedCenterOfMass[2] = newZ;
+    }
+
+    public double[] getOriginalCenter()
+    {
+        return centerOfMass;
     }
 
     private double[] calculateCenterOfMass()
@@ -46,9 +60,9 @@ class ScaleConfiguration {
         }
 
         double size = (double)pointsList.size();
-        center[0] = sumX / size;
-        center[1] = sumY / size;
-        center[2] = sumZ / size;
+        center[0] = scaleFactor * sumX / size;
+        center[1] = scaleFactor * sumY / size;
+        center[2] = scaleFactor * sumZ / size;
 
         return center;
     }
