@@ -469,7 +469,7 @@ public class visualise extends Application
                     }  
                     catch(NumberFormatException nfe)  
                     {  
-                        
+                        buildAlertWindow("Please enter a valid origin and try again.");
                     } 
                 }
             });
@@ -484,16 +484,18 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Boolean> ov,
                                 Boolean old_val, Boolean new_val)
             {
-                if (new_val) {
-                    double[] centerOfMass = sc.calculateCenterOfMass();
-                    sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                    moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                    moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
-                } else {
-                    double[] oldOrigin = sc.getOriginalCenter();
-                    sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                    moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
-                    moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                if (spheresList != null) {
+                    if (new_val) {
+                        double[] centerOfMass = sc.calculateCenterOfMass();
+                        sc.moveCenterTo(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                        moveAxes(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                        moveCamera(centerOfMass[0], centerOfMass[1], centerOfMass[2]);
+                    } else {
+                        double[] oldOrigin = sc.getOriginalCenter();
+                        sc.moveCenterTo(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                        moveAxes(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                        moveCamera(oldOrigin[0], oldOrigin[1], oldOrigin[2]);
+                    }   
                 }
             }
         });
@@ -527,7 +529,19 @@ public class visualise extends Application
         return subScene;
     }
 
-    private VBox buildAlertBox(Stage dialog)
+    private void buildAlertWindow(String alertString)
+    {
+        Stage dialog = new Stage();
+        Scene scene = new Scene(buildAlertBox(dialog, alertString), 300, 100);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(stage);
+        dialog.setFullScreen(false);
+        dialog.setResizable(false);
+        dialog.setScene(scene);
+        dialog.show();
+    }
+
+    private VBox buildAlertBox(Stage dialog, String alertText)
     {
         VBox vbox = new VBox();
         vbox.setSpacing(20);
@@ -535,7 +549,7 @@ public class visualise extends Application
         vbox.setPadding(new Insets(40));
         vbox.setAlignment(Pos.CENTER);
 
-        Text alertLabel = new Text(40, 40, "Failed to load file. Please try again!");
+        Text alertLabel = new Text(40, 40, alertText);
         Button cancelAlert = new Button("OK");
 
         alertLabel.setFill(Color.web("red"));
@@ -566,14 +580,7 @@ public class visualise extends Application
             {
                 if (reader.getPoints() == null)
                 {
-                    Stage dialog = new Stage();
-                    Scene scene = new Scene(buildAlertBox(dialog), 300, 100);
-                    dialog.initModality(Modality.WINDOW_MODAL);
-                    dialog.initOwner(stage);
-                    dialog.setFullScreen(false);
-                    dialog.setResizable(false);
-                    dialog.setScene(scene);
-                    dialog.show();
+                    buildAlertWindow("Fail to open file. Only .pcd format surpported.");
                 }
                 else
                 {
