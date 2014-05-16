@@ -283,7 +283,7 @@ public class visualise extends Application
         sphereSlider = buildSphereSlider();
 
         CheckBox axesCheckBox = buildShowAxesCheckBox();
-        CheckBox setOriginCheckBox = new CheckBox("Set Origin to Center Of Math");
+        CheckBox setOriginCheckBox = new CheckBox("Set Origin to Center Of Mass");
         Button openButton = new Button("Choose File...");
         Button buildButton = new Button("Build");
         Button updateButton = new Button("Update");
