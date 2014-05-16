@@ -3,7 +3,7 @@ public class point implements Comparable<point>
     private double x, y, z;
     private int color = -1;
     private int[] rgb = null;
-    private String[] properties = null;
+    private double[] properties = null;
 
     public point(double x, double y, double z)
     {
@@ -51,21 +51,21 @@ public class point implements Comparable<point>
         return rgb;
     }
 
-    public String[] getProperties()
+    public double[] getProperties()
     {
         return getXYZProperties();
     }
 
-    public String[] getXYZProperties()
+    public double[] getXYZProperties()
     {
         if (properties != null)
             return properties;
         else
         {
-            properties = new String[3];
-            properties[0] = "x: " + this.x;
-            properties[1] = "y: " + this.y;
-            properties[2] = "z: " + this.z;
+            properties = new double[3];
+            properties[0] = this.x;
+            properties[1] = this.y;
+            properties[2] = this.z;
             return properties;
         }
     }
@@ -99,5 +99,3 @@ public class point implements Comparable<point>
             return Math.sqrt((this.x - other.getX()) * (this.x - other.getX()) + (this.y - other.getY()) * (this.y - other.getY()) + (this.z - other.getZ()) * (this.z - other.getZ()));
     }
 }
-
-
