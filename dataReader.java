@@ -57,8 +57,7 @@ class dataReader
     private void configureFileChooser(
         final FileChooser fileChooser) {                   
             fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PCD", "*.pcd"),
-                new FileChooser.ExtensionFilter("PCL", "*.pcl")
+                new FileChooser.ExtensionFilter("Point Cloud Data(PCD)", "*.pcd")
             );
     }
 
@@ -75,9 +74,13 @@ class dataReader
                 double x = Double.parseDouble(coordinates[0]);
                 double y = Double.parseDouble(coordinates[1]);
                 double z = Double.parseDouble(coordinates[2]);
-                int color = (int)Double.parseDouble(coordinates[3]);
-
-                points.add(new point(x, y, z, color));
+                
+                if (coordinates.length == 4) {
+                    int color = (int)Double.parseDouble(coordinates[3]);
+                    points.add(new point(x, y, z, color));   
+                } else {
+                    points.add(new point(x, y, z));
+                }
             }
             reader.close();
         }
