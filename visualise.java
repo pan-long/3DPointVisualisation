@@ -464,6 +464,8 @@ public class visualise extends Application
                     } else {
                         buildAlertWindow("Please enter a valid origin and try again.");
                     }
+                
+                    leftVBox.updateSetOriginCheckBox(false);
                 }
             }
         });
