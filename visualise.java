@@ -69,8 +69,6 @@ public class visualise extends Application
     private double yAngle;
     private double[] originCenter, currentCenter;
 
-    private boolean newPoints;
-
     private List<point> pointsList = null;
     private List<Sphere> spheresList = null;
 
@@ -214,8 +212,7 @@ public class visualise extends Application
 
     private void buildPoints()
     {
-        if (newPoints)
-            leftVBox.updateSetOriginCheckBox(false);
+        leftVBox.updateSetOriginCheckBox(false);
 
         Xform pointsXform = new Xform();
         VBox box = new VBox();
@@ -599,8 +596,6 @@ public class visualise extends Application
                     reset();
                     pointsList = reader.getPoints();
 
-                    newPoints = true;
-
                     sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
                     currentCenter = sc.getCenterOfMass();
@@ -633,8 +628,6 @@ public class visualise extends Application
         leftVBox.setCameraDistanceSliderValue(4.2);
         leftVBox.setFieldOfViewSliderValue(4.2);
         leftVBox.setSphereSliderValue(4.2);
-
-        newPoints = false;
     }
 
     @Override
