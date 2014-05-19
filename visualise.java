@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.SubScene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -30,10 +29,8 @@ import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
-import javafx.util.StringConverter;
 import javafx.scene.control.TextField;
 import javafx.scene.CacheHint;
-import javafx.application.Platform;
 
 public class visualise extends Application
 {
@@ -604,8 +601,6 @@ public class visualise extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        Platform.setImplicitExit(false);
-
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
