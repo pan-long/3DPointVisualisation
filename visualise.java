@@ -55,8 +55,8 @@ public class visualise extends Application
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
 
-    private double cameraDistance = -30;
-    private double cameraFieldOfView = 45;
+    private double cameraDistance = -40;
+    private double cameraFieldOfView = 35;
     private double sphereRadius;
     private double scaleFactor;
     private double mousePosX;
@@ -353,32 +353,40 @@ public class visualise extends Application
                 || Math.abs(currentCenter[1] - y) > 1E-9
                 || Math.abs(currentCenter[2] - z) > 1E-9)
         {
-            reset();
-            int size = pointsList.size();
-            double[] center = sc.getCenterOfMass();
-            originCenter = currentCenter;
-            currentCenter = new double[] {x, y, z};
-
-            for (int i = 0; i < size; i ++)
-            {
-                point p = pointsList.get(i);
-                double newX = p.getX() + (x - center[0]) / scaleFactor;
-                double newY = p.getY() + (y - center[1]) / scaleFactor;
-                double newZ = p.getZ() + (z - center[2]) / scaleFactor;
-                int color = p.getRGB();
-                pointsList.set(i, new point(newX, newY, newZ, color));
-            }
-
-            sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
-
-            scaleFactor = sc.getScaleFactor();
-            sphereRadius = sc.getRadius();
-            cameraDistance = sc.getCameraDistance();
-            cameraFieldOfView = sc.getFieldOfView();
-
+            /* reset(); */
+            /* int size = pointsList.size(); */
+            /* double[] center = sc.getCenterOfMass(); */
+            /* originCenter = currentCenter; */
+            /* currentCenter = new double[] {x, y, z}; */
+            /*  */
+            /* for (int i = 0; i < size; i ++) */
+            /* { */
+            /*     point p = pointsList.get(i); */
+            /*     double newX = p.getX() + (x - center[0]) / scaleFactor; */
+            /*     double newY = p.getY() + (y - center[1]) / scaleFactor; */
+            /*     double newZ = p.getZ() + (z - center[2]) / scaleFactor; */
+            /*     int color = p.getRGB(); */
+            /*     pointsList.set(i, new point(newX, newY, newZ, color)); */
+            /* } */
+            /*  */
+            /* sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE); */
+            /*  */
+            /* scaleFactor = sc.getScaleFactor(); */
+            /* sphereRadius = sc.getRadius(); */
+            /* cameraDistance = sc.getCameraDistance(); */
+            /* cameraFieldOfView = sc.getFieldOfView(); */
+            /*  */
             /* buildCamera(); */
             /* buildAxes(); */
-            buildPoints();
+            /* buildPoints(); */
+            for (Sphere sp : spheresList)
+            {
+                sp.setTranslateX(sp.getTranslateX() + x - currentCenter[0]);
+                sp.setTranslateY(sp.getTranslateY() + y - currentCenter[1]);
+                sp.setTranslateZ(sp.getTranslateZ() + z - currentCenter[2]);
+            }
+            originCenter = currentCenter;
+            currentCenter = new double[] {x, y, z};
         }
     }
 
@@ -400,6 +408,8 @@ public class visualise extends Application
                     } else {
                         buildAlertWindow("Please enter a valid origin and try again.");
                     }
+                
+                    leftVBox.updateSetOriginCheckBox(false);
                 }
             }
         });
