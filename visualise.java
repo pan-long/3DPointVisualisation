@@ -378,6 +378,7 @@ public class visualise extends Application
             sp.setTranslateY(sp.getTranslateY() + y - currentCenter[1]);
             sp.setTranslateZ(sp.getTranslateZ() + z - currentCenter[2]);
         }
+
         originCenter = currentCenter;
         currentCenter = new double[] {x, y, z};
     }
@@ -541,7 +542,6 @@ public class visualise extends Application
 
                     sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
-                    currentCenter = sc.getCenterOfMass();
                     scaleFactor = sc.getScaleFactor();
                     sphereRadius = sc.getRadius();
                     cameraDistance = sc.getCameraDistance();
@@ -550,6 +550,8 @@ public class visualise extends Application
                     /* buildCamera(); */
                     /* buildAxes(); */
                     buildPoints();
+
+                    currentCenter = sc.getCenterOfMass();
                 }
             }
         });
