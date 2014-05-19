@@ -171,13 +171,13 @@ public class visualise extends Application
             @Override
             public void handle(MouseEvent me)
             {
-                if (updateCounter > 0) {
-                    updateCounter--;
-                    return;
-                }
-
-                updateCounter+=5;
-
+                /* if (updateCounter > 0) { */
+                /*     updateCounter--; */
+                /*     return; */
+                /* } */
+                /*  */
+                /* updateCounter+=5; */
+                /*  */
                 mouseOldX = mousePosX;
                 mouseOldY = mousePosY;
                 mousePosX = me.getSceneX();
