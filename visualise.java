@@ -2,7 +2,6 @@ import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 import javafx.scene.SubScene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -365,39 +362,6 @@ public class visualise extends Application
 
     private void rebuildPoints(double x, double y, double z)
     {
-        /* reset(); */
-        /* int size = pointsList.size(); */
-        /* double[] center = sc.getCenterOfMass(); */
-        /* originCenter = currentCenter; */
-        /* currentCenter = new double[] {x, y, z}; */
-        /*  */
-        /* for (int i = 0; i < size; i ++) */
-        /* { */
-        /*     point p = pointsList.get(i); */
-        /*     double newX = p.getX() + (x - center[0]) / scaleFactor; */
-        /*     double newY = p.getY() + (y - center[1]) / scaleFactor; */
-        /*     double newZ = p.getZ() + (z - center[2]) / scaleFactor; */
-        /*     int color = p.getRGB(); */
-        /*     pointsList.set(i, new point(newX, newY, newZ, color)); */
-        /* } */
-        /*  */
-        /* sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE); */
-        /*  */
-        /* scaleFactor = sc.getScaleFactor(); */
-        /* sphereRadius = sc.getRadius(); */
-        /* cameraDistance = sc.getCameraDistance(); */
-        /* cameraFieldOfView = sc.getFieldOfView(); */
-        /*  */
-        /* buildCamera(); */
-        /* buildAxes(); */
-        /* buildPoints(); */
-
-        /* for (Sphere sp : spheresList) */
-        /* { */
-        /*     sp.setTranslateX(sp.getTranslateX() + x - currentCenter[0]); */
-        /*     sp.setTranslateY(sp.getTranslateY() + y - currentCenter[1]); */
-        /*     sp.setTranslateZ(sp.getTranslateZ() + z - currentCenter[2]); */
-        /* } */
         pointGroup.t.setX(pointGroup.t.getX() + x - currentCenter[0]);
         pointGroup.t.setY(pointGroup.t.getY() + y - currentCenter[1]);
         pointGroup.t.setZ(pointGroup.t.getZ() + z - currentCenter[2]);
