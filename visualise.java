@@ -55,8 +55,8 @@ public class visualise extends Application
     private static final double ROTATION_SPEED = 2.0;
     private static final double TRACK_SPEED = 0.3;
 
-    private double cameraDistance = -30;
-    private double cameraFieldOfView = 45;
+    private double cameraDistance = -40;
+    private double cameraFieldOfView = 35;
     private double sphereRadius;
     private double scaleFactor;
     private double mousePosX;
