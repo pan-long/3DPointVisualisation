@@ -34,6 +34,7 @@ import javafx.stage.Modality;
 import javafx.util.StringConverter;
 import javafx.scene.control.TextField;
 import javafx.scene.CacheHint;
+import javafx.application.Platform;
 
 public class visualise extends Application
 {
@@ -78,6 +79,8 @@ public class visualise extends Application
     private Box xAxis, yAxis, zAxis;
     private dataReader reader = null;
     private ScaleConfiguration sc = null;
+
+    private int updateCounter = 0;
 
     private void buildCamera()
     {
@@ -174,6 +177,13 @@ public class visualise extends Application
             @Override
             public void handle(MouseEvent me)
             {
+                if (updateCounter > 0) {
+                    updateCounter--;
+                    return;
+                }
+
+                updateCounter+=5;
+
                 mouseOldX = mousePosX;
                 mouseOldY = mousePosY;
                 mousePosX = me.getSceneX();
@@ -592,6 +602,8 @@ public class visualise extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        Platform.setImplicitExit(false);
+
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
@@ -605,6 +617,9 @@ public class visualise extends Application
 
         space.setCache(true);
         space.setCacheHint(CacheHint.SPEED);
+
+        root.setCache(true);
+        root.setCacheHint(CacheHint.SPEED);
 
         space.getChildren().addAll(pointGroup);
 
