@@ -13,7 +13,6 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.SubScene;
@@ -48,14 +47,13 @@ public class visualise extends Application
 
     private static final double CAMERA_INITIAL_X_ANGLE = 190.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 150.0;
-    private static final double CAMERA_NEAR_CLIP = 0.1;
-    private static final double CAMERA_FAR_CLIP = 10000;
-
-    private static final double MAX_ABS_COORDINATE = 10;
-    private static final double HYDROGEN_ANGLE = 104.5;
-    private static final double MOUSE_SPEED = 0.1;
-    private static final double ROTATION_SPEED = 2.0;
-    private static final double TRACK_SPEED = 0.3;
+    private static final double CAMERA_NEAR_CLIP       = 0.1;
+    private static final double CAMERA_FAR_CLIP        = 10000;
+    private static final double MAX_ABS_COORDINATE     = 10;
+    private static final double HYDROGEN_ANGLE         = 104.5;
+    private static final double MOUSE_SPEED            = 0.1;
+    private static final double ROTATION_SPEED         = 2.0;
+    private static final double TRACK_SPEED            = 0.3;
 
     private double cameraDistance = -40;
     private double cameraFieldOfView = 35;
@@ -71,13 +69,15 @@ public class visualise extends Application
     private double yAngle;
     private double[] originCenter, currentCenter;
 
-    private List<point> pointsList = null;
+    private List<point> pointsList   = null;
     private List<Sphere> spheresList = null;
 
-    private Stage stage = null;
-    private LeftVBox leftVBox = null;
-    private Box xAxis, yAxis, zAxis;
-    private dataReader reader = null;
+    private Stage stage           = null;
+    private LeftVBox leftVBox     = null;
+    private Box xAxis             = null;
+    private Box yAxis             = null;
+    private Box zAxis             = null;
+    private dataReader reader     = null;
     private ScaleConfiguration sc = null;
 
     private int updateCounter = 0;
@@ -641,3 +641,4 @@ public class visualise extends Application
         launch(args);
     }
 }
+
