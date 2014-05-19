@@ -33,12 +33,13 @@ import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.util.StringConverter;
 import javafx.scene.control.TextField;
+import javafx.scene.CacheHint;
 
 public class visualise extends Application
 {
     final Group root = new Group();
     final Xform axisGroup = new Xform();
-    final Xform pointGroup = new Xform();
+    private Xform pointGroup = new Xform();
     final Xform space = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
@@ -212,7 +213,7 @@ public class visualise extends Application
         if (newPoints)
             leftVBox.updateSetOriginCheckBox(false);
 
-        Xform pointsXform = new Xform();
+        //Xform pointsXform = new Xform();
         VBox box = new VBox();
         box.setStyle("-fx-background-color: white;");
 
@@ -229,6 +230,7 @@ public class visualise extends Application
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(Color.DARKRED);
         material.setSpecularColor(Color.RED);
+        
         for (point p : pointsList)
         {
             int[] rgb = p.parseRGB();
@@ -239,18 +241,24 @@ public class visualise extends Application
                 material.setSpecularColor(Color.rgb(rgb[0], rgb[1], rgb[2]));
             }
 
-            Xform pointXform = new Xform();
+            // Xform pointXform = new Xform();
+            // pointXform.setCache(true);
+            // pointXform.setCacheHint(CacheHint.SPEED);
+
             Sphere pointSphere = new Sphere(sphereRadius);
+            pointSphere.setCache(true);
+            pointSphere.setCacheHint(CacheHint.SPEED);
+
             spheresList.add(pointSphere);
             pointSphere.setMaterial(material);
             pointSphere.setTranslateX(p.getX() * scaleFactor);
             pointSphere.setTranslateY(p.getY() * scaleFactor);
             pointSphere.setTranslateZ(p.getZ() * scaleFactor);
 
-            pointsXform.getChildren().add(pointXform);
-            pointXform.getChildren().add(pointSphere);
+            // pointsXform.getChildren().add(pointXform);
+            // pointXform.getChildren().add(pointSphere);
 
-            pointXform.setOnMouseMoved(new EventHandler<MouseEvent>()
+            pointSphere.setOnMouseMoved(new EventHandler<MouseEvent>()
             {
                 @Override
                 public void handle(MouseEvent me)
@@ -275,7 +283,7 @@ public class visualise extends Application
                 }
             });
 
-            pointXform.setOnMouseExited(new EventHandler<MouseEvent>()
+            pointSphere.setOnMouseExited(new EventHandler<MouseEvent>()
             {
                 @Override
                 public void handle(MouseEvent me)
@@ -284,9 +292,11 @@ public class visualise extends Application
                         pop.hide();
                 }
             });
+
+            pointGroup.getChildren().add(pointSphere);
         }
 
-        pointGroup.getChildren().add(pointsXform);
+        // pointGroup.getChildren().add(pointsXform);
         /* space.getChildren().addAll(pointGroup); */
     }
 
@@ -591,6 +601,13 @@ public class visualise extends Application
 
         buildAxes();
         buildCamera();
+
+        pointGroup.setCache(true);
+        pointGroup.setCacheHint(CacheHint.SPEED);
+
+        space.setCache(true);
+        space.setCacheHint(CacheHint.SPEED);
+
         space.getChildren().addAll(pointGroup);
 
         borderPane.setCenter(buildSubScene());
