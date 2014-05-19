@@ -382,6 +382,8 @@ public class visualise extends Application
             {
                 if (spheresList != null)
                 {
+                    leftVBox.updateSetOriginCheckBox(false);
+
                     double[] newOrigin = leftVBox.getNewOrigin();
                     if (newOrigin != null)
                     {
@@ -392,7 +394,6 @@ public class visualise extends Application
                         buildAlertWindow("Please enter a valid origin and try again.");
                     }
 
-                    leftVBox.updateSetOriginCheckBox(false);
                 }
             }
         });
