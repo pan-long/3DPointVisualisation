@@ -372,12 +372,16 @@ public class visualise extends Application
         /* buildCamera(); */
         /* buildAxes(); */
         /* buildPoints(); */
-        for (Sphere sp : spheresList)
-        {
-            sp.setTranslateX(sp.getTranslateX() + x - currentCenter[0]);
-            sp.setTranslateY(sp.getTranslateY() + y - currentCenter[1]);
-            sp.setTranslateZ(sp.getTranslateZ() + z - currentCenter[2]);
-        }
+
+        /* for (Sphere sp : spheresList) */
+        /* { */
+        /*     sp.setTranslateX(sp.getTranslateX() + x - currentCenter[0]); */
+        /*     sp.setTranslateY(sp.getTranslateY() + y - currentCenter[1]); */
+        /*     sp.setTranslateZ(sp.getTranslateZ() + z - currentCenter[2]); */
+        /* } */
+        pointGroup.t.setX(pointGroup.t.getX() + x - currentCenter[0]);
+        pointGroup.t.setY(pointGroup.t.getY() + y - currentCenter[1]);
+        pointGroup.t.setZ(pointGroup.t.getZ() + z - currentCenter[2]);
 
         originCenter = currentCenter;
         currentCenter = new double[] {x, y, z};
@@ -582,8 +586,6 @@ public class visualise extends Application
         root.getChildren().add(space);
         root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
-
-        space.setCache(true);
 
         buildAxes();
         buildCamera();
