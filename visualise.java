@@ -79,11 +79,6 @@ public class visualise extends Application
     private Box xAxis, yAxis, zAxis;
     private dataReader reader = null;
     private ScaleConfiguration sc = null;
-    private Slider cameraDistanceSlider = null;
-    private Slider fieldOfViewSlider = null;
-    private Slider sphereSlider = null;
-    private CheckBox axesCheckBox = null;
-    private CheckBox setOriginCheckBox = null;
 
     private void buildCamera()
     {
@@ -352,57 +347,6 @@ public class visualise extends Application
         });
     }
 
-    private Slider buildSlider()
-    {
-        Slider slider = new Slider();
-        slider.setMin(0.2);
-        slider.setMax(8.2);
-        slider.setValue(4.2);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(1);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(0.2);
-
-        slider.setLabelFormatter(new StringConverter<Double>()
-        {
-            @Override
-            public String toString(Double n)
-            {
-                for (int i = 1; i < 5 ; i++)
-                {
-                    if (n < i)
-                    {
-                        return "1/" + String.valueOf(6 - i);
-                    }
-                }
-
-                if (n < 5)
-                {
-                    return "1";
-                }
-
-                for (int i = 6; i < 10 ; i++)
-                {
-                    if (n < i)
-                    {
-                        return String.valueOf(i - 4);
-                    }
-                }
-
-                return "";
-            }
-
-            @Override
-            public Double fromString(String s)
-            {
-                return Double.valueOf(s);
-            }
-        });
-
-        return slider;
-    }
-
     private void rebuildPoints(double x, double y, double z)
     {
         if (Math.abs(currentCenter[0] - x) > 1E-9
@@ -640,7 +584,6 @@ public class visualise extends Application
         space.getChildren().addAll(pointGroup);
 
         borderPane.setCenter(buildSubScene());
-        //borderPane.setLeft(buildLeftVbox(stage));
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
