@@ -222,6 +222,13 @@ public class visualise extends Application
 
         //Xform pointsXform = new Xform();
         VBox box = new VBox();
+        Label labelX = new Label();
+        Label labelY = new Label();
+        Label labelZ = new Label();
+        box.getChildren().add(labelX);
+        box.getChildren().add(labelY);
+        box.getChildren().add(labelZ);
+
         box.setStyle("-fx-background-color: white;");
 
         Popup pop = new Popup();
@@ -270,18 +277,13 @@ public class visualise extends Application
                 @Override
                 public void handle(MouseEvent me)
                 {
-                    box.getChildren().clear();
                     double[] properties = p.getProperties();
                     double[] centerOfMass = sc.getOriginalCenter();
                     double[] newCenterOfMass = sc.getCenterOfMass();
 
-                    Label labelX = new Label("x: " + (properties[0] + (newCenterOfMass[0] - centerOfMass[0]) / scaleFactor));
-                    Label labelY = new Label("y: " + (properties[1] + (newCenterOfMass[1] - centerOfMass[1]) / scaleFactor));
-                    Label labelZ = new Label("z: " + (properties[2] + (newCenterOfMass[2] - centerOfMass[2]) / scaleFactor));
-
-                    box.getChildren().add(labelX);
-                    box.getChildren().add(labelY);
-                    box.getChildren().add(labelZ);
+                    labelX.setText("x: " + (properties[0] + (newCenterOfMass[0] - centerOfMass[0]) / scaleFactor));
+                    labelY.setText("y: " + (properties[1] + (newCenterOfMass[1] - centerOfMass[1]) / scaleFactor));
+                    labelZ.setText("z: " + (properties[2] + (newCenterOfMass[2] - centerOfMass[2]) / scaleFactor));
 
                     pop.setX(me.getSceneX());
                     pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
