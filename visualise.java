@@ -38,6 +38,7 @@ public class visualise extends Application
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
     final Xform cameraXform2 = new Xform();
+    final Xform cameraXform3 = new Xform();
 
     private static final double CAMERA_INITIAL_X_ANGLE = 190.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 150.0;
@@ -80,8 +81,9 @@ public class visualise extends Application
     {
         root.getChildren().add(cameraXform);
         cameraXform.getChildren().add(cameraXform2);
-        cameraXform2.getChildren().add(camera);
-        cameraXform2.setRotateZ(180.0);
+        cameraXform2.getChildren().add(cameraXform3);
+        cameraXform3.getChildren().add(camera);
+        cameraXform3.setRotateZ(180.0);
 
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
@@ -204,6 +206,9 @@ public class visualise extends Application
                         cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
 
                     cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+
+                    /* space.ry.setAngle(space.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED); */
+                    /* space.rx.setAngle(space.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED); */
                 }
             }
         });
@@ -238,7 +243,7 @@ public class visualise extends Application
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(Color.DARKRED);
         material.setSpecularColor(Color.RED);
-        
+
         for (point p : pointsList)
         {
             int[] rgb = p.parseRGB();
@@ -603,4 +608,5 @@ public class visualise extends Application
         launch(args);
     }
 }
+
 
