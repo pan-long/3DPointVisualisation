@@ -71,9 +71,12 @@ class dataReader
             int numOfPoints = 0;
             
             //read number of points and skip other unused header entries
-            for (int i=0; i < 11; i++ ) {
-                if (i == 9) {
-                    numOfPoints = Integer.parseInt(reader.readLine());
+            for (int i=0; i < 12; i++ ) {
+                String[] temp = reader.readLine().split(" ");
+                if (temp[0].equals("POINTS")) {
+                    numOfPoints = Integer.parseInt(temp[1]);
+                } else if (temp[0].equals("DATA")) {
+                    break;
                 }
             }
  
@@ -88,7 +91,7 @@ class dataReader
                     double normal_x = Double.parseDouble(coordinates[3]);
                     double normal_y = Double.parseDouble(coordinates[4]);
                     double normal_z = Double.parseDouble(coordinates[5]);
-                    points.add(new point(x, y, z, normal_x, normal_y, norm, normal_z));
+                    points.add(new point(x, y, z, normal_x, normal_y, normal_z));
                 } else if (coordinates.length == 4) {
                     int color = (int)Double.parseDouble(coordinates[3]);
                     points.add(new point(x, y, z, color));   
