@@ -1,15 +1,17 @@
 public class point implements Comparable<point>
 {
-    private double x, y, z;
+    private double x, y, z, normal_x, normal_y, normal_z;
     private int color = -1;
     private int[] rgb = null;
     private double[] properties = null;
+    private DataType type;
 
     public point(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.type = DataType.XYZ;
     }
 
     public point(double x, double y, double z, int color)
@@ -18,6 +20,23 @@ public class point implements Comparable<point>
         this.y = y;
         this.z = z;
         this.color = color;
+        this.type = DataType.XYZRGB;
+    }
+
+    public point(double x, double y, double z, double normal_x, double normal_y, double normal_z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.normal_x = normal_x;
+        this.normal_y = normal_y;
+        this.normal_z = normal_z;
+        this.type = DataType.XYZNORMAL;
+    }
+
+    public DataType getType()
+    {
+        return this.type;
     }
 
     public double getX()
@@ -40,8 +59,10 @@ public class point implements Comparable<point>
         return this.color;
     }
 
-    public int[] parseRGB(){
-        if (rgb == null && color != -1) {
+    public int[] parseRGB()
+    {
+        if (rgb == null && color != -1)
+        {
             rgb = new int[3];
             rgb[0] = (color >> 16) & 0x0000ff;
             rgb[1] = (color >> 8)  & 0x0000ff;
@@ -53,43 +74,59 @@ public class point implements Comparable<point>
 
     public double[] getProperties()
     {
-        return getXYZProperties();
+        switch (type)
+        {
+            case XYZ:
+                return getXYZProperties();
+            case XYZRGB:
+                return getXYZRGBProperties();
+            case XYZNORMAL:
+                return getXYZNORMALProperties();
+            default:
+                return null;
+        }
     }
 
-    public double[] getXYZProperties()
+    private double[] getXYZProperties()
     {
-        if (properties != null)
-            return properties;
-        else
-        {
-            properties = new double[3];
-            properties[0] = this.x;
-            properties[1] = this.y;
-            properties[2] = this.z;
-            return properties;
-        }
+        if (properties == null)
+            properties = new double[] {this.x, this.y, this.z};
+        return properties;
     }
 
+    private double[] getXYZRGBProperties()
+    {
+        if (properties == null)
+            properties = new double[] {this.x, this.y, this.z, this.color};
+        return properties;
+    }
+
+    private double[] getXYZNORMALProperties()
+    {
+        if (properties == null)
+            properties = new double[] {this.x, this.y, this.z, this.normal_x, this.normal_y, this.normal_z};
+        return properties;
+    }
     @Override
-        public int compareTo(point other)
-        {
-            if (other == null)
-                return 1;
-            else if (this.x > other.getX())
-                return 1;
-            else if (this.x < other.getX())
-                return -1;
-            else if (this.y > other.getY())
-                return 1;
-            else if (this.y < other.getY())
-                return -1;
-            else if (this.z > other.getZ())
-                return 1;
-            else if (this.z < other.getZ())
-                return -1;
-            else
-                return 0;
-        }
+    public int compareTo(point other)
+    {
+        if (other == null)
+            return 1;
+        else if (this.x > other.getX())
+            return 1;
+        else if (this.x < other.getX())
+            return -1;
+        else if (this.y > other.getY())
+            return 1;
+        else if (this.y < other.getY())
+            return -1;
+        else if (this.z > other.getZ())
+            return 1;
+        else if (this.z < other.getZ())
+            return -1;
+        else
+            return 0;
+    }
 
     public double disTo(point other)
     {
@@ -99,3 +136,5 @@ public class point implements Comparable<point>
             return Math.sqrt((this.x - other.getX()) * (this.x - other.getX()) + (this.y - other.getY()) * (this.y - other.getY()) + (this.z - other.getZ()) * (this.z - other.getZ()));
     }
 }
+
+
