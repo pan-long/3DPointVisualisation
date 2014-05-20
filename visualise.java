@@ -75,8 +75,6 @@ public class visualise extends Application
     private dataReader reader     = null;
     private ScaleConfiguration sc = null;
 
-    private int updateCounter = 0;
-
     private void buildCamera()
     {
         root.getChildren().add(cameraXform);
@@ -173,13 +171,6 @@ public class visualise extends Application
             @Override
             public void handle(MouseEvent me)
             {
-                /* if (updateCounter > 0) { */
-                /*     updateCounter--; */
-                /*     return; */
-                /* } */
-                /*  */
-                /* updateCounter+=5; */
-                /*  */
                 mouseOldX = mousePosX;
                 mouseOldY = mousePosY;
                 mousePosX = me.getSceneX();
