@@ -243,10 +243,6 @@ public class visualise extends Application
                 material.setSpecularColor(Color.rgb(rgb[0], rgb[1], rgb[2]));
             }
 
-            // Xform pointXform = new Xform();
-            // pointXform.setCache(true);
-            // pointXform.setCacheHint(CacheHint.SPEED);
-
             Box pointBox = new Box(sphereRadius, sphereRadius, sphereRadius);
             pointBox.setCache(true);
             pointBox.setCacheHint(CacheHint.SPEED);
@@ -256,9 +252,6 @@ public class visualise extends Application
             pointBox.setTranslateX(p.getX() * scaleFactor);
             pointBox.setTranslateY(p.getY() * scaleFactor);
             pointBox.setTranslateZ(p.getZ() * scaleFactor);
-
-            // pointsXform.getChildren().add(pointXform);
-            // pointXform.getChildren().add(pointSphere);
 
             pointBox.setOnMouseMoved(new EventHandler<MouseEvent>()
             {
@@ -292,9 +285,6 @@ public class visualise extends Application
 
             pointGroup.getChildren().add(pointBox);
         }
-
-        // pointGroup.getChildren().add(pointsXform);
-        /* space.getChildren().addAll(pointGroup); */
     }
 
     private void bindListenerToCameraDistanceSlider()
@@ -331,28 +321,34 @@ public class visualise extends Application
         });
     }
 
-    //private void bindListenerToSphereSlider()
-    //{
-        //Slider slider = leftVBox.getSphereSlider();
+    private void bindListenerToBoxSlider()
+    {
+        Slider slider = leftVBox.getSphereSlider();
 
-        //slider.valueProperty().addListener(new ChangeListener<Number>()
-        //{
-            //public void changed(ObservableValue<? extends Number> ov,
-                                //Number old_val, Number new_val)
-            //{
-                //if (spheresList != null)
-                //{
-                    //for (Sphere sphere : spheresList)
-                    //{
-                        //if (new_val.doubleValue() < 4.2)
-                            //sphere.setRadius((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
-                        //else
-                            //sphere.setRadius((new_val.doubleValue() - 3.2) * sphereRadius);
-                    //}
-                //}
-            //}
-        //});
-    //}
+        slider.valueProperty().addListener(new ChangeListener<Number>()
+        {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val)
+            {
+                if (boxList != null)
+                {
+                    for (Box box : boxList)
+                    {
+                        if (new_val.doubleValue() < 4.2){
+                            box.setWidth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                            box.setHeight((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                            box.setDepth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                        }
+                        else {
+                            box.setWidth((new_val.doubleValue() - 3.2) * sphereRadius);
+                            box.setHeight((new_val.doubleValue() - 3.2) * sphereRadius);
+                            box.setDepth((new_val.doubleValue() - 3.2) * sphereRadius);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     private void rebuildPoints(double x, double y, double z)
     {
@@ -431,7 +427,7 @@ public class visualise extends Application
     {
         bindListenerToCameraDistanceSlider();
         bindListenerToFieldOfViewSlider();
-        //bindListenerToSphereSlider();
+        bindListenerToBoxSlider();
         bindListenersToUpdateOriginButton();
         bindListenersToSetOriginCheckBox();
         bindListenersToShowAxesCheckBox();
@@ -525,7 +521,7 @@ public class visualise extends Application
                     sc = new ScaleConfiguration(pointsList, MAX_ABS_COORDINATE);
 
                     scaleFactor = sc.getScaleFactor();
-                    sphereRadius = sc.getRadius();
+                    sphereRadius = sc.getRadius() * 2;
                     cameraDistance = sc.getCameraDistance();
                     cameraFieldOfView = sc.getFieldOfView();
 
