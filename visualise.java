@@ -457,7 +457,7 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 1000, 768, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(root, 800, 768, true, SceneAntialiasing.DISABLED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
@@ -585,7 +585,7 @@ public class visualise extends Application
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        Scene scene = new Scene(borderPane, 1200, 768, true);
+        Scene scene = new Scene(borderPane, 1000, 768, true, SceneAntialiasing.DISABLED);
 
         handleMouse(scene, space);
 
