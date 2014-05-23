@@ -1,31 +1,35 @@
-import javafx.application.Application;
-import javafx.scene.*;
-import javafx.scene.paint.Color;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.stage.Stage;
-import javafx.stage.Popup;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.transform.Rotate;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-import java.util.List;
 import java.util.ArrayList;
-import javafx.scene.SubScene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
-import javafx.geometry.Insets;
+import java.util.List;
+
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.CheckBox;
-import javafx.stage.FileChooser;
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.scene.control.TextField;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 public class visualise extends Application
 {
