@@ -47,7 +47,7 @@ public class visualise extends Application
     private static final double CAMERA_NEAR_CLIP       = 0.1;
     private static final double CAMERA_FAR_CLIP        = 10000;
     private static final double MAX_ABS_COORDINATE     = 10;
-    private static final double HYDROGEN_ANGLE         = 104.5;
+    //private static final double HYDROGEN_ANGLE         = 104.5;
     private static final double MOUSE_SPEED            = 0.1;
     private static final double ROTATION_SPEED         = 2.0;
     private static final double TRACK_SPEED            = 0.3;
@@ -63,7 +63,7 @@ public class visualise extends Application
     private double mouseDeltaX;
     private double mouseDeltaY;
     private double xAngle;
-    private double yAngle;
+    //private double yAngle;
     private double[] originCenter, currentCenter;
 
     private List<point> pointsList   = null;
@@ -103,12 +103,12 @@ public class visualise extends Application
         camera.setFieldOfView(cameraFieldOfView);
     }
 
-    private void moveCamera(double newX, double newY, double newZ)
-    {
-        cameraXform2.t.setX(newX);
-        cameraXform2.t.setY(newY);
-        cameraXform2.t.setZ(newZ);
-    }
+    //private void moveCamera(double newX, double newY, double newZ)
+    //{
+        //cameraXform2.t.setX(newX);
+        //cameraXform2.t.setY(newY);
+        //cameraXform2.t.setZ(newZ);
+    //}
 
     private void buildAxes()
     {
@@ -164,7 +164,7 @@ public class visualise extends Application
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
                 xAngle = cameraXform.rx.getAngle();
-                yAngle = cameraXform.ry.getAngle();
+                //yAngle = cameraXform.ry.getAngle();
             }
         });
 
@@ -588,5 +588,3 @@ public class visualise extends Application
         launch(args);
     }
 }
-
-
