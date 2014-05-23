@@ -7,7 +7,6 @@ import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.stage.Popup;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Sphere;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.event.EventHandler;
@@ -27,7 +26,6 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.scene.control.TextField;
-import javafx.scene.CacheHint;
 
 public class visualise extends Application
 {
@@ -457,7 +455,7 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 1000, 768, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(root, 800, 600, false, SceneAntialiasing.DISABLED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
@@ -564,20 +562,11 @@ public class visualise extends Application
     {
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
-        root.setDepthTest(DepthTest.ENABLE);
+        //root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
         buildAxes();
         buildCamera();
-
-        pointGroup.setCache(true);
-        pointGroup.setCacheHint(CacheHint.SPEED);
-
-        space.setCache(true);
-        space.setCacheHint(CacheHint.SPEED);
-
-        root.setCache(true);
-        root.setCacheHint(CacheHint.SPEED);
 
         space.getChildren().addAll(pointGroup);
 
@@ -585,7 +574,7 @@ public class visualise extends Application
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        Scene scene = new Scene(borderPane, 1200, 768, true);
+        Scene scene = new Scene(borderPane, 1100, 600, false, SceneAntialiasing.DISABLED);
 
         handleMouse(scene, space);
 
