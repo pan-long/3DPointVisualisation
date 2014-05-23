@@ -65,7 +65,7 @@ public class visualise extends Application
     private double[] originCenter, currentCenter;
 
     private List<point> pointsList   = null;
-    private List<Sphere> spheresList = null;
+    private List<Box> boxList = null;
 
     private Stage stage           = null;
     private LeftVBox leftVBox     = null;
@@ -226,10 +226,10 @@ public class visualise extends Application
         pop.setHideOnEscape(true);
         pop.getContent().addAll(box);
 
-        if (spheresList == null)
-            spheresList = new ArrayList<Sphere> ();
+        if (boxList == null)
+            boxList = new ArrayList<Box> ();
         else
-            spheresList.clear();
+            boxList.clear();
 
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(Color.DARKRED);
@@ -249,20 +249,20 @@ public class visualise extends Application
             // pointXform.setCache(true);
             // pointXform.setCacheHint(CacheHint.SPEED);
 
-            Sphere pointSphere = new Sphere(sphereRadius);
-            pointSphere.setCache(true);
-            pointSphere.setCacheHint(CacheHint.SPEED);
+            Box pointBox = new Box(sphereRadius, sphereRadius, sphereRadius);
+            pointBox.setCache(true);
+            pointBox.setCacheHint(CacheHint.SPEED);
 
-            spheresList.add(pointSphere);
-            pointSphere.setMaterial(material);
-            pointSphere.setTranslateX(p.getX() * scaleFactor);
-            pointSphere.setTranslateY(p.getY() * scaleFactor);
-            pointSphere.setTranslateZ(p.getZ() * scaleFactor);
+            boxList.add(pointBox);
+            pointBox.setMaterial(material);
+            pointBox.setTranslateX(p.getX() * scaleFactor);
+            pointBox.setTranslateY(p.getY() * scaleFactor);
+            pointBox.setTranslateZ(p.getZ() * scaleFactor);
 
             // pointsXform.getChildren().add(pointXform);
             // pointXform.getChildren().add(pointSphere);
 
-            pointSphere.setOnMouseMoved(new EventHandler<MouseEvent>()
+            pointBox.setOnMouseMoved(new EventHandler<MouseEvent>()
             {
                 @Override
                 public void handle(MouseEvent me)
@@ -282,7 +282,7 @@ public class visualise extends Application
                 }
             });
 
-            pointSphere.setOnMouseExited(new EventHandler<MouseEvent>()
+            pointBox.setOnMouseExited(new EventHandler<MouseEvent>()
             {
                 @Override
                 public void handle(MouseEvent me)
@@ -292,7 +292,7 @@ public class visualise extends Application
                 }
             });
 
-            pointGroup.getChildren().add(pointSphere);
+            pointGroup.getChildren().add(pointBox);
         }
 
         // pointGroup.getChildren().add(pointsXform);
@@ -333,28 +333,28 @@ public class visualise extends Application
         });
     }
 
-    private void bindListenerToSphereSlider()
-    {
-        Slider slider = leftVBox.getSphereSlider();
+    //private void bindListenerToSphereSlider()
+    //{
+        //Slider slider = leftVBox.getSphereSlider();
 
-        slider.valueProperty().addListener(new ChangeListener<Number>()
-        {
-            public void changed(ObservableValue<? extends Number> ov,
-                                Number old_val, Number new_val)
-            {
-                if (spheresList != null)
-                {
-                    for (Sphere sphere : spheresList)
-                    {
-                        if (new_val.doubleValue() < 4.2)
-                            sphere.setRadius((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
-                        else
-                            sphere.setRadius((new_val.doubleValue() - 3.2) * sphereRadius);
-                    }
-                }
-            }
-        });
-    }
+        //slider.valueProperty().addListener(new ChangeListener<Number>()
+        //{
+            //public void changed(ObservableValue<? extends Number> ov,
+                                //Number old_val, Number new_val)
+            //{
+                //if (spheresList != null)
+                //{
+                    //for (Sphere sphere : spheresList)
+                    //{
+                        //if (new_val.doubleValue() < 4.2)
+                            //sphere.setRadius((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                        //else
+                            //sphere.setRadius((new_val.doubleValue() - 3.2) * sphereRadius);
+                    //}
+                //}
+            //}
+        //});
+    //}
 
     private void rebuildPoints(double x, double y, double z)
     {
@@ -376,7 +376,7 @@ public class visualise extends Application
             @Override
             public void handle(final ActionEvent e)
             {
-                if (spheresList != null)
+                if (boxList != null)
                 {
                     leftVBox.updateSetOriginCheckBox(false);
 
@@ -404,7 +404,7 @@ public class visualise extends Application
             public void changed(ObservableValue<? extends Boolean> ov,
                                 Boolean old_val, Boolean new_val)
             {
-                if (spheresList != null)
+                if (boxList != null)
                 {
                     if (new_val)
                     {
@@ -433,7 +433,7 @@ public class visualise extends Application
     {
         bindListenerToCameraDistanceSlider();
         bindListenerToFieldOfViewSlider();
-        bindListenerToSphereSlider();
+        //bindListenerToSphereSlider();
         bindListenersToUpdateOriginButton();
         bindListenersToSetOriginCheckBox();
         bindListenersToShowAxesCheckBox();
@@ -457,7 +457,7 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 800, 768, true, SceneAntialiasing.DISABLED);
+        SubScene subScene = new SubScene(root, 1000, 768, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
@@ -585,7 +585,7 @@ public class visualise extends Application
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        Scene scene = new Scene(borderPane, 1000, 768, true, SceneAntialiasing.DISABLED);
+        Scene scene = new Scene(borderPane, 1200, 768, true);
 
         handleMouse(scene, space);
 
