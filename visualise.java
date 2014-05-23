@@ -7,7 +7,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -29,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class visualise extends Application
@@ -69,13 +73,14 @@ public class visualise extends Application
     private List<point> pointsList   = null;
     private List<Box> boxList = null;
 
-    private Stage stage           = null;
-    private LeftVBox leftVBox     = null;
-    private Box xAxis             = null;
-    private Box yAxis             = null;
-    private Box zAxis             = null;
-    private dataReader reader     = null;
-    private ScaleConfiguration sc = null;
+    private Stage stage              = null;
+    private Rectangle2D screenBounds = null;
+    private LeftVBox leftVBox        = null;
+    private Box xAxis                = null;
+    private Box yAxis                = null;
+    private Box zAxis                = null;
+    private dataReader reader        = null;
+    private ScaleConfiguration sc    = null;
 
     private void buildCamera()
     {
@@ -105,9 +110,9 @@ public class visualise extends Application
 
     //private void moveCamera(double newX, double newY, double newZ)
     //{
-        //cameraXform2.t.setX(newX);
-        //cameraXform2.t.setY(newY);
-        //cameraXform2.t.setZ(newZ);
+    //cameraXform2.t.setX(newX);
+    //cameraXform2.t.setY(newY);
+    //cameraXform2.t.setZ(newZ);
     //}
 
     private void buildAxes()
@@ -304,6 +309,29 @@ public class visualise extends Application
                     camera.setTranslateZ((1 / (5.2 - new_val.doubleValue())) * cameraDistance);
                 else
                     camera.setTranslateZ((new_val.doubleValue() - 3.2) * cameraDistance);
+
+                for (Box b : boxList)
+                {
+                     //System.out.println(b.localToScreen(0, 0, 0));
+                    if (b.localToScreen(0, 0, 0) == null)
+                        b.setVisible(false);
+                    else
+                    {
+                        Point2D p = b.localToScreen(0, 0, 0);
+                        double x = p.getX(), y = p.getY();
+                        double sceneX_min = root.localToScreen(0, 0).getX();
+                        double sceneX_max = root.localToScreen(800, 600).getX();
+                        double sceneY_min = root.localToScreen(0, 0).getY();
+                        double sceneY_max = root.localToScreen(800, 600).getY();
+                        //System.out.println(sceneX_min);
+                        //System.out.println(sceneX_max);
+
+                        if (!screenBounds.contains(p))
+                            b.setVisible(false);
+                        if (x > sceneX_min && x < sceneX_max && y > sceneY_min && y < sceneY_max)
+                            b.setVisible(true);
+                    }
+                }
             }
         });
     }
@@ -338,12 +366,14 @@ public class visualise extends Application
                 {
                     for (Box box : boxList)
                     {
-                        if (new_val.doubleValue() < 4.2){
+                        if (new_val.doubleValue() < 4.2)
+                        {
                             box.setWidth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
                             box.setHeight((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
                             box.setDepth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
                         }
-                        else {
+                        else
+                        {
                             box.setWidth((new_val.doubleValue() - 3.2) * sphereRadius);
                             box.setHeight((new_val.doubleValue() - 3.2) * sphereRadius);
                             box.setDepth((new_val.doubleValue() - 3.2) * sphereRadius);
@@ -565,6 +595,7 @@ public class visualise extends Application
         //root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
+        screenBounds = Screen.getPrimary().getVisualBounds();
         buildAxes();
         buildCamera();
 
