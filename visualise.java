@@ -34,6 +34,7 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class visualise extends Application
 {
@@ -48,13 +49,13 @@ public class visualise extends Application
 
     private static final double CAMERA_INITIAL_X_ANGLE = 190.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 150.0;
-    private static final double CAMERA_NEAR_CLIP       = 0.1;
-    private static final double CAMERA_FAR_CLIP        = 10000;
-    private static final double MAX_ABS_COORDINATE     = 10;
-    //private static final double HYDROGEN_ANGLE         = 104.5;
-    private static final double MOUSE_SPEED            = 0.1;
-    private static final double ROTATION_SPEED         = 2.0;
-    private static final double TRACK_SPEED            = 0.3;
+    private static final double CAMERA_NEAR_CLIP = 0.1;
+    private static final double CAMERA_FAR_CLIP = 10000;
+    private static final double MAX_ABS_COORDINATE = 10;
+    // private static final double HYDROGEN_ANGLE = 104.5;
+    private static final double MOUSE_SPEED = 0.1;
+    private static final double ROTATION_SPEED = 2.0;
+    private static final double TRACK_SPEED = 0.3;
 
     private double cameraDistance = -40;
     private double cameraFieldOfView = 35;
@@ -67,20 +68,21 @@ public class visualise extends Application
     private double mouseDeltaX;
     private double mouseDeltaY;
     private double xAngle;
-    //private double yAngle;
+    // private double yAngle;
     private double[] originCenter, currentCenter;
 
-    private List<point> pointsList   = null;
+    private List<point> pointsList = null;
     private List<Box> boxList = null;
 
-    private Stage stage              = null;
+    private Stage stage = null;
+    private Scene scene = null;
     private Rectangle2D screenBounds = null;
-    private LeftVBox leftVBox        = null;
-    private Box xAxis                = null;
-    private Box yAxis                = null;
-    private Box zAxis                = null;
-    private dataReader reader        = null;
-    private ScaleConfiguration sc    = null;
+    private LeftVBox leftVBox = null;
+    private Box xAxis = null;
+    private Box yAxis = null;
+    private Box zAxis = null;
+    private dataReader reader = null;
+    private ScaleConfiguration sc = null;
 
     private void buildCamera()
     {
@@ -108,12 +110,12 @@ public class visualise extends Application
         camera.setFieldOfView(cameraFieldOfView);
     }
 
-    //private void moveCamera(double newX, double newY, double newZ)
-    //{
-    //cameraXform2.t.setX(newX);
-    //cameraXform2.t.setY(newY);
-    //cameraXform2.t.setZ(newZ);
-    //}
+    // private void moveCamera(double newX, double newY, double newZ)
+    // {
+    // cameraXform2.t.setX(newX);
+    // cameraXform2.t.setY(newY);
+    // cameraXform2.t.setZ(newZ);
+    // }
 
     private void buildAxes()
     {
@@ -169,7 +171,7 @@ public class visualise extends Application
                 mouseOldX = me.getSceneX();
                 mouseOldY = me.getSceneY();
                 xAngle = cameraXform.rx.getAngle();
-                //yAngle = cameraXform.ry.getAngle();
+                // yAngle = cameraXform.ry.getAngle();
             }
         });
 
@@ -189,8 +191,10 @@ public class visualise extends Application
 
                 if (me.isControlDown() && me.isPrimaryButtonDown())
                 {
-                    cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX * MOUSE_SPEED * modifier * TRACK_SPEED);
-                    cameraXform2.t.setY(cameraXform2.t.getY() + mouseDeltaY * MOUSE_SPEED * modifier * TRACK_SPEED);
+                    cameraXform2.t.setX(cameraXform2.t.getX() + mouseDeltaX
+                                        * MOUSE_SPEED * modifier * TRACK_SPEED);
+                    cameraXform2.t.setY(cameraXform2.t.getY() + mouseDeltaY
+                                        * MOUSE_SPEED * modifier * TRACK_SPEED);
                 }
 
                 else if (me.isPrimaryButtonDown())
@@ -198,26 +202,38 @@ public class visualise extends Application
                     /* System.out.println("x: " + cameraXform.rx.getAngle()); */
                     /* System.out.println("y: " + cameraXform.ry.getAngle()); */
 
-                    if ((xAngle % 360 > 90 && xAngle % 360 < 270) || (xAngle % 360 < 0 && xAngle % 360 + 360 > 90 && xAngle % 360 + 360 < 270))
-                        cameraXform.ry.setAngle(cameraXform.ry.getAngle() + mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    if ((xAngle % 360 > 90 && xAngle % 360 < 270)
+                            || (xAngle % 360 < 0 && xAngle % 360 + 360 > 90 && xAngle % 360 + 360 < 270))
+                        cameraXform.ry.setAngle(cameraXform.ry.getAngle()
+                                                + mouseDeltaX * MOUSE_SPEED * modifier
+                                                * ROTATION_SPEED);
                     else
-                        cameraXform.ry.setAngle(cameraXform.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                        cameraXform.ry.setAngle(cameraXform.ry.getAngle()
+                                                - mouseDeltaX * MOUSE_SPEED * modifier
+                                                * ROTATION_SPEED);
 
-                    cameraXform.rx.setAngle(cameraXform.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                    cameraXform.rx.setAngle(cameraXform.rx.getAngle()
+                                            + mouseDeltaY * MOUSE_SPEED * modifier
+                                            * ROTATION_SPEED);
 
-                    /* space.ry.setAngle(space.ry.getAngle() - mouseDeltaX * MOUSE_SPEED * modifier * ROTATION_SPEED); */
-                    /* space.rx.setAngle(space.rx.getAngle() + mouseDeltaY * MOUSE_SPEED * modifier * ROTATION_SPEED); */
+                    /*
+                     * space.ry.setAngle(space.ry.getAngle() - mouseDeltaX *
+                     * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                     */
+                    /*
+                     * space.rx.setAngle(space.rx.getAngle() + mouseDeltaY *
+                     * MOUSE_SPEED * modifier * ROTATION_SPEED);
+                     */
                 }
             }
         });
     }
 
-
     private void buildPoints()
     {
         leftVBox.updateSetOriginCheckBox(false);
 
-        //Xform pointsXform = new Xform();
+        // Xform pointsXform = new Xform();
         VBox box = new VBox();
         Label labelX = new Label();
         Label labelY = new Label();
@@ -234,7 +250,7 @@ public class visualise extends Application
         pop.getContent().addAll(box);
 
         if (boxList == null)
-            boxList = new ArrayList<Box> ();
+            boxList = new ArrayList<Box>();
         else
             boxList.clear();
 
@@ -271,12 +287,18 @@ public class visualise extends Application
                     double[] centerOfMass = sc.getOriginalCenter();
                     double[] newCenterOfMass = sc.getCenterOfMass();
 
-                    labelX.setText("x: " + (properties[0] + (newCenterOfMass[0] - centerOfMass[0]) / scaleFactor));
-                    labelY.setText("y: " + (properties[1] + (newCenterOfMass[1] - centerOfMass[1]) / scaleFactor));
-                    labelZ.setText("z: " + (properties[2] + (newCenterOfMass[2] - centerOfMass[2]) / scaleFactor));
+                    labelX.setText("x: "
+                                   + (properties[0] + (newCenterOfMass[0] - centerOfMass[0])
+                                      / scaleFactor));
+                    labelY.setText("y: "
+                                   + (properties[1] + (newCenterOfMass[1] - centerOfMass[1])
+                                      / scaleFactor));
+                    labelZ.setText("z: "
+                                   + (properties[2] + (newCenterOfMass[2] - centerOfMass[2])
+                                      / scaleFactor));
 
                     pop.setX(me.getSceneX());
-                    pop.setY(me.getSceneY() - pop.getHeight() / 2.0) ;
+                    pop.setY(me.getSceneY() + pop.getHeight() / 2.0);
 
                     pop.show(stage);
                 }
@@ -306,29 +328,43 @@ public class visualise extends Application
                                 Number old_val, Number new_val)
             {
                 if (new_val.doubleValue() < 4.2)
-                    camera.setTranslateZ((1 / (5.2 - new_val.doubleValue())) * cameraDistance);
+                    camera.setTranslateZ((1 / (5.2 - new_val.doubleValue()))
+                                         * cameraDistance);
                 else
-                    camera.setTranslateZ((new_val.doubleValue() - 3.2) * cameraDistance);
+                    camera.setTranslateZ((new_val.doubleValue() - 3.2)
+                                         * cameraDistance);
 
                 for (Box b : boxList)
                 {
-                     //System.out.println(b.localToScreen(0, 0, 0));
+                    // System.out.println(b.localToScreen(0, 0, 0));
                     if (b.localToScreen(0, 0, 0) == null)
                         b.setVisible(false);
                     else
                     {
                         Point2D p = b.localToScreen(0, 0, 0);
+                        //System.out.println(p3D);
                         double x = p.getX(), y = p.getY();
-                        double sceneX_min = root.localToScreen(0, 0).getX();
-                        double sceneX_max = root.localToScreen(800, 600).getX();
-                        double sceneY_min = root.localToScreen(0, 0).getY();
-                        double sceneY_max = root.localToScreen(800, 600).getY();
+                        double sceneX = scene.getX(), sceneY = scene.getY();
+                        Window window = scene.getWindow();
+                        double sceneX_min = window.getX() + sceneX + 300;
+                        double sceneX_max = sceneX_min + scene.getWidth() - 300;
+                        double sceneY_min = window.getY() + sceneY;
+                        double sceneY_max = sceneY_min + scene.getHeight();
+                        //System.out.println(window.getX());
+                        //System.out.println(window.getY());
                         //System.out.println(sceneX_min);
                         //System.out.println(sceneX_max);
+                        //System.out.println(sceneY_min);
+                        //System.out.println(sceneY_max);
+                        //System.out.println(x);
+                        //System.out.println(y);
+                        System.out.println(sceneX);
+                        System.out.println(sceneY);
 
-                        if (!screenBounds.contains(p))
+                        if (x < sceneX_min || x > sceneX_max || y < sceneY_min || y > sceneY_max)
                             b.setVisible(false);
-                        if (x > sceneX_min && x < sceneX_max && y > sceneY_min && y < sceneY_max)
+                        if (x > sceneX_min && x < sceneX_max && y > sceneY_min
+                                && y < sceneY_max)
                             b.setVisible(true);
                     }
                 }
@@ -346,9 +382,11 @@ public class visualise extends Application
                                 Number old_val, Number new_val)
             {
                 if (new_val.doubleValue() < 4.2)
-                    camera.setFieldOfView((1 / (5.2 - new_val.doubleValue())) * cameraFieldOfView);
+                    camera.setFieldOfView((1 / (5.2 - new_val.doubleValue()))
+                                          * cameraFieldOfView);
                 else
-                    camera.setFieldOfView((new_val.doubleValue() - 3.2) * cameraFieldOfView);
+                    camera.setFieldOfView((new_val.doubleValue() - 3.2)
+                                          * cameraFieldOfView);
             }
         });
     }
@@ -368,15 +406,21 @@ public class visualise extends Application
                     {
                         if (new_val.doubleValue() < 4.2)
                         {
-                            box.setWidth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
-                            box.setHeight((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
-                            box.setDepth((1 / (5.2 - new_val.doubleValue())) * sphereRadius);
+                            box.setWidth((1 / (5.2 - new_val.doubleValue()))
+                                         * sphereRadius);
+                            box.setHeight((1 / (5.2 - new_val.doubleValue()))
+                                          * sphereRadius);
+                            box.setDepth((1 / (5.2 - new_val.doubleValue()))
+                                         * sphereRadius);
                         }
                         else
                         {
-                            box.setWidth((new_val.doubleValue() - 3.2) * sphereRadius);
-                            box.setHeight((new_val.doubleValue() - 3.2) * sphereRadius);
-                            box.setDepth((new_val.doubleValue() - 3.2) * sphereRadius);
+                            box.setWidth((new_val.doubleValue() - 3.2)
+                                         * sphereRadius);
+                            box.setHeight((new_val.doubleValue() - 3.2)
+                                          * sphereRadius);
+                            box.setDepth((new_val.doubleValue() - 3.2)
+                                         * sphereRadius);
                         }
                     }
                 }
@@ -391,15 +435,14 @@ public class visualise extends Application
         pointGroup.t.setZ(pointGroup.t.getZ() + z - currentCenter[2]);
 
         originCenter = currentCenter;
-        currentCenter = new double[] {x, y, z};
+        currentCenter = new double[] { x, y, z };
     }
 
     private void bindListenersToUpdateOriginButton()
     {
         Button button = leftVBox.getUpdateButton();
 
-        button.setOnAction(
-            new EventHandler<ActionEvent>()
+        button.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(final ActionEvent e)
@@ -440,7 +483,8 @@ public class visualise extends Application
                     }
                     else
                     {
-                        rebuildPoints(originCenter[0], originCenter[1], originCenter[2]);
+                        rebuildPoints(originCenter[0], originCenter[1],
+                                      originCenter[2]);
                     }
                 }
             }
@@ -485,7 +529,8 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 800, 600, false, SceneAntialiasing.DISABLED);
+        SubScene subScene = new SubScene(root, 800, 600, false,
+                                         SceneAntialiasing.DISABLED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
@@ -517,8 +562,7 @@ public class visualise extends Application
 
         alertLabel.setFill(Color.web("red"));
 
-        cancelAlert.setOnAction(
-            new EventHandler<ActionEvent>()
+        cancelAlert.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(final ActionEvent e)
@@ -537,8 +581,7 @@ public class visualise extends Application
     {
         Button button = leftVBox.getBuildButton();
 
-        button.setOnAction(
-            new EventHandler<ActionEvent>()
+        button.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(final ActionEvent e)
@@ -592,10 +635,11 @@ public class visualise extends Application
     {
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
-        //root.setDepthTest(DepthTest.ENABLE);
+        // root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
         screenBounds = Screen.getPrimary().getVisualBounds();
+        //System.out.println(screenBounds);
         buildAxes();
         buildCamera();
 
@@ -605,7 +649,8 @@ public class visualise extends Application
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        Scene scene = new Scene(borderPane, 1100, 600, false, SceneAntialiasing.DISABLED);
+        scene = new Scene(borderPane, 1100, 600, false,
+                                SceneAntialiasing.DISABLED);
 
         handleMouse(scene, space);
 
@@ -619,3 +664,4 @@ public class visualise extends Application
         launch(args);
     }
 }
+
