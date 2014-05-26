@@ -486,7 +486,7 @@ public class visualise extends Application {
 
     private SubScene buildSubScene() {
         SubScene subScene = new SubScene(root, 800, 600, false,
-                SceneAntialiasing.DISABLED);
+                SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
 
