@@ -34,8 +34,10 @@ import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.scene.DepthTest;
 
-public class visualise extends Application {
+public class visualise extends Application
+{
     final Group root = new Group();
     final Xform axisGroup = new Xform();
     private Xform pointGroup = new Xform();
@@ -253,6 +255,7 @@ public class visualise extends Application {
             }
 
             Box pointBox = new Box(sphereRadius, sphereRadius, sphereRadius);
+            pointBox.setDepthTest(DepthTest.ENABLE);
             pointBox.setCache(true);
             pointBox.setCacheHint(CacheHint.SPEED);
 
@@ -576,7 +579,7 @@ public class visualise extends Application {
     public void start(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
-        // root.setDepthTest(DepthTest.ENABLE);
+        root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
         screenBounds = Screen.getPrimary().getVisualBounds();
@@ -590,8 +593,8 @@ public class visualise extends Application {
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        scene = new Scene(borderPane, 1100, 600, false,
-                SceneAntialiasing.DISABLED);
+        scene = new Scene(borderPane, 1100, 600, true,
+                                SceneAntialiasing.DISABLED);
 
         handleMouse(scene, space);
 
