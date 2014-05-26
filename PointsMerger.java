@@ -16,7 +16,7 @@ class PointsMerger {
         mergedPointsList = new ArrayList<point> ();
         scaleFactor = sc.getScaleFactor();
         radius = sc.getRadius();
-        minDis = 4 * radius;
+        minDis = 3 * radius;
     }
 
     public List<point> getMergedPoints(){
@@ -26,7 +26,7 @@ class PointsMerger {
             else{
                 boolean isMerged = false;
                 for (point mergedPoint : mergedPointsList){
-                    if (p.disTo(mergedPoint) * scaleFactor < minDis){
+                    if (p.disTo(mergedPoint) * scaleFactor < minDis && mergedPoint.counterInc()){
                         isMerged = true;
                         break;
                     }

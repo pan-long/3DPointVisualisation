@@ -5,6 +5,8 @@ public class point implements Comparable<point>
     private int[] rgb = null;
     private double[] properties = null;
     private DataType type;
+    private int mergedCounter = 0;
+    final int MAX_COUNT = 5;
 
     public point(double x, double y, double z)
     {
@@ -32,6 +34,16 @@ public class point implements Comparable<point>
         this.normal_y = normal_y;
         this.normal_z = normal_z;
         this.type = DataType.XYZNORMAL;
+    }
+
+    public boolean counterInc()
+    {
+        if (mergedCounter > MAX_COUNT)
+            return false;
+        else{
+            mergedCounter ++;
+            return true;
+        }
     }
 
     public DataType getType()
