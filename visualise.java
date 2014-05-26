@@ -290,7 +290,7 @@ public class visualise extends Application {
                 @Override
                 public void handle(MouseEvent me) {
                     if (pop.isShowing())
-                pop.hide();
+                        pop.hide();
                 }
             });
 
@@ -324,14 +324,15 @@ public class visualise extends Application {
             Window window = scene.getWindow();
             double sceneX_min = window.getX() + sceneX + 300;
             double sceneX_max = sceneX_min + scene.getWidth() - 300;
+            /* System.out.println(scene.getWidth()); */
             double sceneY_min = window.getY() + sceneY;
             double sceneY_max = sceneY_min + scene.getHeight();
             // System.out.println(window.getX());
             // System.out.println(window.getY());
-            System.out.println(sceneX_min);
-            System.out.println(sceneX_max);
-            System.out.println(sceneY_min);
-            System.out.println(sceneY_max);
+            /* System.out.println(sceneX_min); */
+            /* System.out.println(sceneX_max); */
+            /* System.out.println(sceneY_min); */
+            /* System.out.println(sceneY_max); */
             // System.out.println(x);
             // System.out.println(y);
             // System.out.println(sceneX);
@@ -346,8 +347,8 @@ public class visualise extends Application {
             // else if (x < sceneX_min || x > sceneX_max || y <
             // sceneY_min || y > sceneY_max)
             else {
-                System.out.println(x);
-                System.out.println(y);
+                /* System.out.println(x); */
+                /* System.out.println(y); */
                 b.setVisible(false);
             }
             // }
