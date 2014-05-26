@@ -1,0 +1,6 @@
+
+class PointsMerger {
+    public PointsMerger(){
+    
+    }
+}
