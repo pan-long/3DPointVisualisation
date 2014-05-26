@@ -127,4 +127,6 @@ class ScaleConfiguration {
     public double getFieldOfView(){
         return this.fieldOfView;
     }
+
+    
 }

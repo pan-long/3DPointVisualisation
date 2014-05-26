@@ -35,6 +35,7 @@ import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.scene.DepthTest;
 
 public class visualise extends Application
 {
@@ -269,6 +270,7 @@ public class visualise extends Application
             }
 
             Box pointBox = new Box(sphereRadius, sphereRadius, sphereRadius);
+            pointBox.setDepthTest(DepthTest.ENABLE);
             pointBox.setCache(true);
             pointBox.setCacheHint(CacheHint.SPEED);
 
@@ -350,16 +352,16 @@ public class visualise extends Application
                         double sceneX_max = sceneX_min + scene.getWidth() - 300;
                         double sceneY_min = window.getY() + sceneY;
                         double sceneY_max = sceneY_min + scene.getHeight();
-                        //System.out.println(window.getX());
-                        //System.out.println(window.getY());
-                        //System.out.println(sceneX_min);
-                        //System.out.println(sceneX_max);
+                        // System.out.println(window.getX());
+                        // System.out.println(window.getY());
+                        // System.out.println(sceneX_min);
+                        // System.out.println(sceneX_max);
                         //System.out.println(sceneY_min);
                         //System.out.println(sceneY_max);
-                        //System.out.println(x);
-                        //System.out.println(y);
-                        System.out.println(sceneX);
-                        System.out.println(sceneY);
+                        System.out.println(x);
+                        System.out.println(y);
+                        // System.out.println(sceneX);
+                        // System.out.println(sceneY);
 
                         if (x < sceneX_min || x > sceneX_max || y < sceneY_min || y > sceneY_max)
                             b.setVisible(false);
@@ -529,7 +531,7 @@ public class visualise extends Application
 
     private SubScene buildSubScene()
     {
-        SubScene subScene = new SubScene(root, 800, 600, false,
+        SubScene subScene = new SubScene(root, 800, 600, true,
                                          SceneAntialiasing.DISABLED);
         subScene.setCamera(camera);
         subScene.setFill(Color.GREY);
@@ -635,7 +637,7 @@ public class visualise extends Application
     {
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(space);
-        // root.setDepthTest(DepthTest.ENABLE);
+        root.setDepthTest(DepthTest.ENABLE);
         stage = primaryStage;
 
         screenBounds = Screen.getPrimary().getVisualBounds();
@@ -649,7 +651,7 @@ public class visualise extends Application
         leftVBox = new LeftVBox();
         bindListenersToUI();
         borderPane.setLeft(leftVBox);
-        scene = new Scene(borderPane, 1100, 600, false,
+        scene = new Scene(borderPane, 1100, 600, true,
                                 SceneAntialiasing.DISABLED);
 
         handleMouse(scene, space);
